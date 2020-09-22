@@ -16,13 +16,13 @@ public class PlayerController : MonoBehaviour, IShooter
     [SerializeField]
     private float m_acceleration = 0.1f;
     [SerializeField] 
-    private float m_wallDetectionDistanceForward = 0.5f,
-        m_wallDetectionDistanceBackward = 0.5f,
-        m_wallDetectionDistanceLeft = 0.5f,
-        m_wallDetectionDistanceRight = 0.5f;
+    private float m_detectionDistanceForward = 0.5f,
+        m_detectionDistanceBackward = 0.5f,
+        m_detectionDistanceLeft = 0.5f,
+        m_detectionDistanceRight = 0.5f;
     private bool m_isArmed;
     [SerializeField]
-    private LayerMask m_wallLayerMask;
+    private LayerMask environmentLayerMask;
     [SerializeField]
     private LayerMask m_damageableLayer;
     [SerializeField]
@@ -169,10 +169,10 @@ public class PlayerController : MonoBehaviour, IShooter
     {
         bool canMoveForward, canMoveBackward, canMoveLeft, canMoveRight;
 
-        canMoveForward = !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), m_wallDetectionDistanceForward, m_wallLayerMask);
-        canMoveBackward = !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), m_wallDetectionDistanceBackward, m_wallLayerMask);
-        canMoveLeft = !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left), m_wallDetectionDistanceLeft, m_wallLayerMask);
-        canMoveRight = !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.right), m_wallDetectionDistanceRight, m_wallLayerMask);
+        canMoveForward = !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), m_detectionDistanceForward, environmentLayerMask);
+        canMoveBackward = !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), m_detectionDistanceBackward, environmentLayerMask);
+        canMoveLeft = !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left), m_detectionDistanceLeft, environmentLayerMask);
+        canMoveRight = !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.right), m_detectionDistanceRight, environmentLayerMask);
 
         if (v > 0f && !canMoveForward) v = 0f;
         if (v < 0f && !canMoveBackward) v = 0f;
@@ -333,9 +333,9 @@ public class PlayerController : MonoBehaviour, IShooter
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * m_wallDetectionDistanceForward);
-        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.back) * m_wallDetectionDistanceBackward);
-        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.left) * m_wallDetectionDistanceLeft);
-        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.right) * m_wallDetectionDistanceRight);
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * m_detectionDistanceForward);
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.back) * m_detectionDistanceBackward);
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.left) * m_detectionDistanceLeft);
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.right) * m_detectionDistanceRight);
     }
 }

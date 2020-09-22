@@ -40,7 +40,7 @@ public class SniperRifle: Rifle
         for (int x = 0; x < 20; x++)
         {
             Bullet bullet = Instantiate(AssetManager.SniperBullet(), bulletPosition, bulletRotation);
-            bullet.Setup(bulletDirection, m_bulletSpeed, damageableLayer, false);
+            bullet.Setup(bulletDirection, m_bulletSpeed, m_damages, damageableLayer, false);
             yield return new WaitForSeconds(0f);
         }
 

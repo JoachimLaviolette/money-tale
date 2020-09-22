@@ -4,12 +4,11 @@ public class Bullet : MonoBehaviour
 {
     private Vector3 m_direction;
     private float m_moveSpeed;
-    [SerializeField]
     private float m_damages;
     private LayerMask m_damageableLayer;
     private bool m_destroyAfterDamage;
     [SerializeField] 
-    private LayerMask[] m_environmentLayers;
+    private LayerMask[] m_onDestroyLayers;
 
     public void FixedUpdate()
     {
@@ -19,10 +18,11 @@ public class Bullet : MonoBehaviour
     /**
      * Setup the bullet
      */
-    public void Setup(Vector3 direction, float speed, LayerMask damageableLayer, bool destroyAfterDamage = true)
+    public void Setup(Vector3 direction, float speed, float damages, LayerMask damageableLayer, bool destroyAfterDamage = true)
     {
         m_direction = new Vector3(direction.x, 0f, direction.z).normalized;
         m_moveSpeed = speed;
+        m_damages = damages;
         m_damageableLayer = damageableLayer;
         m_destroyAfterDamage = destroyAfterDamage;
     }
@@ -44,17 +44,9 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            /*foreach (LayerMask layer in m_environmentLayers)
-                if (Mathf.Pow(2, collider.gameObject.layer) == layer.value) Destroy(gameObject);*/
+            foreach (LayerMask layer in m_onDestroyLayers)
+                if (Mathf.Pow(2, collider.gameObject.layer) == layer.value)
+                    Destroy(gameObject);    
         }
-
     }
-
-    /**
-     * Destroy the bullet when out of the viewport
-     */
-    /*private void OnBecameInvisible()
-    {
-        Destroy(gameObject);
-    }*/
 }
