@@ -2,24 +2,26 @@
 
 public class Bullet : MonoBehaviour
 {
-    private Vector3 m_direction;
-    private float m_moveSpeed;
-    private float m_damages;
-    private LayerMask m_damageableLayer;
-    private bool m_destroyAfterDamage;
-    [SerializeField] 
-    private LayerMask[] m_onDestroyLayers;
+    protected bool m_isStatic;
+    protected Vector3 m_direction;
+    protected float m_moveSpeed;
+    protected float m_damages;
+    protected LayerMask m_damageableLayer;
+    protected bool m_destroyAfterDamage;
+    [SerializeField]
+    protected LayerMask[] m_onDestroyLayers;
 
-    public void FixedUpdate()
+    protected void FixedUpdate()
     {
-        transform.position += m_direction * m_moveSpeed * Time.deltaTime;
+        if (!m_isStatic) transform.position += m_direction * m_moveSpeed * Time.deltaTime;
     }
 
     /**
      * Setup the bullet
      */
-    public void Setup(Vector3 direction, float speed, float damages, LayerMask damageableLayer, bool destroyAfterDamage = true)
+    virtual public void Setup(bool isStatic, Vector3 direction, float speed, float damages, LayerMask damageableLayer, bool destroyAfterDamage = true)
     {
+        m_isStatic = isStatic;
         m_direction = new Vector3(direction.x, 0f, direction.z).normalized;
         m_moveSpeed = speed;
         m_damages = damages;
@@ -30,7 +32,7 @@ public class Bullet : MonoBehaviour
     /**
      * Handle the collision
      */
-    private void OnTriggerEnter(Collider collider)
+    protected void OnTriggerEnter(Collider collider)
     {
         IDamageable collidedObject = collider.GetComponent<IDamageable>();
 

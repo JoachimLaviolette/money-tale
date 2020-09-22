@@ -36,14 +36,10 @@ public class SniperRifle: Rifle
     {
         m_weaponAmmo--;
         Transform bulletFire = Instantiate(AssetManager.BulletFire(), bulletFirePosition, bulletFireRotation);
-
-        for (int x = 0; x < 20; x++)
-        {
-            Bullet bullet = Instantiate(AssetManager.SniperBullet(), bulletPosition, bulletRotation);
-            bullet.Setup(bulletDirection, m_bulletSpeed, m_damages, damageableLayer, false);
-            yield return new WaitForSeconds(0f);
-        }
-
+        Bullet bullet = Instantiate(AssetManager.SniperBullet(), bulletPosition, bulletRotation);
+        bullet.Setup(true, bulletDirection, m_bulletSpeed, m_damages, damageableLayer);
+        yield return new WaitForSeconds(0.5f);
         Destroy(bulletFire.gameObject);
+        Destroy(bullet.gameObject);
     }
 }

@@ -5,8 +5,6 @@ public class UIManager : MonoBehaviour
 {
     private static UIManager m_instance;
     [SerializeField]
-    private Camera m_sceneCamera;
-    [SerializeField]
     private Texture2D m_mouseCursorTexture;
     [SerializeField]
     private ActionPopup m_pickUpPopup;

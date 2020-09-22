@@ -46,14 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0540851f0be4fcc48a96acc95faf3bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_outerLimitLayerMask:
-    serializedVersion: 2
-    m_Bits: 2048
   m_icon: {fileID: 21300000, guid: 11b29d2a8a36f8a418d6818e711d1b60, type: 3}
   m_damages: 100
   m_fireRate: 1
   m_bulletSpeed: 45
-  m_weaponMaxAmmo: 2
+  m_weaponMaxAmmo: 20
 --- !u!212 &-2836931219188247887
 SpriteRenderer:
   m_ObjectHideFlags: 0

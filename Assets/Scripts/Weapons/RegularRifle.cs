@@ -37,7 +37,7 @@ public class RegularRifle: Rifle
         m_weaponAmmo--;
         Transform bulletFire = Instantiate(AssetManager.BulletFire(), bulletFirePosition, bulletFireRotation);
         Bullet bullet = Instantiate(AssetManager.RegularBullet(), bulletPosition, bulletRotation);
-        bullet.Setup(bulletDirection, m_bulletSpeed, m_damages, damageableLayer);
+        bullet.Setup(false, bulletDirection, m_bulletSpeed, m_damages, damageableLayer);
         yield return new WaitForSeconds(0.15f);
         Destroy(bulletFire.gameObject);
     }
