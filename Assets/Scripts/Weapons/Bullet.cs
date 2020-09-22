@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
      */
     public void Setup(Vector3 direction, float speed, LayerMask damageableLayer, bool destroyAfterDamage = true)
     {
-        m_direction = direction.normalized;
+        m_direction = new Vector3(direction.x, 0f, direction.z).normalized;
         m_moveSpeed = speed;
         m_damageableLayer = damageableLayer;
         m_destroyAfterDamage = destroyAfterDamage;
@@ -37,21 +37,24 @@ public class Bullet : MonoBehaviour
         if (Mathf.Pow(2, collider.gameObject.layer) == m_damageableLayer.value)
         {
             if (collidedObject != null)
+            {
                 collidedObject.Damage(m_damages);
                 if (m_destroyAfterDamage) Destroy(gameObject);
+            }
         }
         else
         {
-            foreach (LayerMask layer in m_environmentLayers)
-                if (Mathf.Pow(2, collider.gameObject.layer) == layer.value) Destroy(gameObject);
+            /*foreach (LayerMask layer in m_environmentLayers)
+                if (Mathf.Pow(2, collider.gameObject.layer) == layer.value) Destroy(gameObject);*/
         }
+
     }
 
     /**
      * Destroy the bullet when out of the viewport
      */
-    private void OnBecameInvisible()
+    /*private void OnBecameInvisible()
     {
         Destroy(gameObject);
-    }
+    }*/
 }

@@ -1193,7 +1193,7 @@ GameObject:
   - component: {fileID: 387726435}
   - component: {fileID: 387726434}
   - component: {fileID: 387726438}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2936,7 +2936,7 @@ MonoBehaviour:
     m_Bits: 2048
   m_damageableLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_sceneCamera: {fileID: 1086002545}
   m_bulletFirePosition: {fileID: 1943277160}
   m_bulletPosition: {fileID: 221986627}
@@ -3730,7 +3730,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1509394225}
   m_Layer: 0
-  m_Name: Environement
+  m_Name: Environment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4755,7 +4755,7 @@ GameObject:
   - component: {fileID: 1929148222}
   - component: {fileID: 1929148221}
   - component: {fileID: 1929148220}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Basement Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}

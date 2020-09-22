@@ -148,15 +148,12 @@ public class PlayerController : MonoBehaviour, IShooter
         {
             if (m_weaponInventory[m_currentWeaponIndex].CanFire())
             {
-                Vector3 bulletDirection = (m_sceneCamera.ScreenToWorldPoint(Input.mousePosition) - m_bulletPosition.position).normalized;
-                bulletDirection.y = 0f;
-
                 m_weaponInventory[m_currentWeaponIndex].Fire(
                         m_bulletFirePosition.position,
                         Quaternion.Euler(90f, 0f, -transform.rotation.eulerAngles.y),
                         m_bulletPosition.position,
                         Quaternion.Euler(90f, 0f, 90f - transform.rotation.eulerAngles.y),
-                        bulletDirection,
+                        (m_sceneCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position),
                         m_damageableLayer
                     );
 
