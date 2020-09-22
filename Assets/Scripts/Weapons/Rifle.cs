@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class Rifle: MonoBehaviour, IPickable
+public abstract class Rifle: MonoBehaviour, IPickable, IReleasable
 {
     [SerializeField]
     protected Sprite m_icon;
@@ -20,6 +20,7 @@ public abstract class Rifle: MonoBehaviour, IPickable
     protected int m_weaponAmmo;
     protected int m_bulletRatio = 1; // how many bullets are shot within one shot
     protected bool m_isSelected = false;
+    private float m_yTranslation = 10f;
 
     virtual protected void Start()
     {
@@ -55,7 +56,19 @@ public abstract class Rifle: MonoBehaviour, IPickable
      */
     public void PickUp()
     {
-        gameObject.transform.Translate(0f, -10f, 0f);
+        gameObject.transform.Translate(0f, -m_yTranslation, 0f);
+    }
+
+    /**
+     * Release the rifle at the given position
+     */
+    public void Release(Vector3 position)
+    {
+        transform.Translate(0f, m_yTranslation, 0f);
+        transform.position = new Vector3(
+            position.x,
+            transform.position.y,
+            position.z);
     }
 
     /**

@@ -27,28 +27,17 @@ public class WeaponSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         Disable();
     }
 
-    public void Setup(bool isEmpty, PlayerController playerController, int index, Sprite icon, string name, bool isSelected)
+    public void Setup(bool isEmpty, PlayerController playerController = null, int index = -1, Sprite icon = null, string name = "", bool isSelected = false)
     {
         m_isEmpty = isEmpty;
+        m_playerController = playerController;
+        m_index = index;
+        m_icon.sprite = icon;
+        m_name.text = name.ToUpper();
+        m_isSelected = isSelected;
 
-        if (m_isEmpty)
-        {
-            m_playerController = null;
-            m_index = -1;
-            m_icon.sprite = null;
-            m_name.text = "";
-            m_isSelected = false;
-            Disable();
-        } 
-        else
-        {
-            m_playerController = playerController;
-            m_index = index;
-            m_icon.sprite = icon;
-            m_name.text = name.ToUpper();
-            m_isSelected = isSelected;
-            Enable();
-        }
+        if (m_isEmpty) Disable();
+        else Enable();
 
         SetSelected(m_isSelected);
     }

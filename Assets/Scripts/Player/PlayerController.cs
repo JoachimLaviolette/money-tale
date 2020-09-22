@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviour, IShooter
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) Shoot();
         if (Input.GetKeyDown(KeyCode.E)) PickUp();
+        if (Input.GetKeyDown(KeyCode.R)) Release();
     }
 
     /**
@@ -159,7 +160,7 @@ public class PlayerController : MonoBehaviour, IShooter
                         m_damageableLayer
                     );
 
-                m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weapon = m_weaponInventory[m_currentWeaponIndex] });
+                m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
             }
         }
     }
@@ -228,6 +229,9 @@ public class PlayerController : MonoBehaviour, IShooter
         m_weaponInventory[weaponIndex].SetSelected(true);
         m_animator.SetBool(m_isArmedHash, true);
         m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
+        
+        if (m_weaponInventory[weaponIndex] is IReleasable && m_weaponInventory[weaponIndex] is IPickable)
+            UIManager.DisplayReleasePopup(((IPickable) m_weaponInventory[weaponIndex]).GetName());
     }
 
     /**
@@ -252,7 +256,7 @@ public class PlayerController : MonoBehaviour, IShooter
         if (pickableObject != null)
         {
             m_focusedPickableObject = pickableObject;
-            UIManager.DisplayPickUpPopup(transform.position, pickableObject.GetName());
+            UIManager.DisplayPickUpPopup(pickableObject.GetName());
         }
     }
 
@@ -295,6 +299,27 @@ public class PlayerController : MonoBehaviour, IShooter
         UIManager.HidePickUpPopup();
         m_focusedPickableObject.PickUp();
         m_focusedPickableObject = null;
+    }
+
+    /**
+     * Release the currently selected pickable object if any
+     */
+    private void Release()
+    {
+        if (!m_isArmed) return;
+        if (m_currentWeaponIndex == -1) return;
+
+        IReleasable releasableObject = m_weaponInventory[m_currentWeaponIndex] is IReleasable ? (IReleasable) m_weaponInventory[m_currentWeaponIndex] : null;
+
+        if (releasableObject == null) return;
+
+        int currentWeaponIndex = m_currentWeaponIndex;
+        UnEquip(currentWeaponIndex);
+        m_weaponInventory.Remove(m_weaponInventory[currentWeaponIndex]);
+        m_onWeaponInventoryChanged?.Invoke(this, new OnWeaponInventoryChangedArgs { m_weaponSlotCount = m_maxWeaponsAllowed, m_weapons = m_weaponInventory });
+
+        UIManager.HideReleasePopup();
+        releasableObject.Release(transform.position);
     }
 
     /**

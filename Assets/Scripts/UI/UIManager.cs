@@ -9,7 +9,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Texture2D m_mouseCursorTexture;
     [SerializeField]
-    private PickUpPopup m_pickUpPopup;
+    private ActionPopup m_pickUpPopup;
+    [SerializeField]
+    private ActionPopup m_releasePopup;
     [SerializeField]
     private Transform m_weaponInventoryContainer;
     [SerializeField]
@@ -18,6 +20,9 @@ public class UIManager : MonoBehaviour
     private WeaponData m_selectedWeaponData;
     [SerializeField]
     private PlayerController m_playerController;
+
+    private static string m_pickupSampleText = "Pick up {0} [E]";
+    private static string m_releaseSampleText = "Release {0} [R]";
 
     private void Awake()
     {
@@ -35,10 +40,10 @@ public class UIManager : MonoBehaviour
     /**
      * Display the pick up popup
      */
-    public static void DisplayPickUpPopup(Vector3 position, string objectName)
+    public static void DisplayPickUpPopup(string objectName)
     {
         m_instance.m_pickUpPopup.gameObject.SetActive(true);
-        m_instance.m_pickUpPopup.Setup(objectName);
+        m_instance.m_pickUpPopup.Setup(m_pickupSampleText, objectName);
     }
 
     /**
@@ -47,6 +52,23 @@ public class UIManager : MonoBehaviour
     public static void HidePickUpPopup()
     {
         m_instance.m_pickUpPopup.gameObject.SetActive(false);
+    }
+
+    /**
+     * Display the release popup
+     */
+    public static void DisplayReleasePopup(string objectName)
+    {
+        m_instance.m_releasePopup.gameObject.SetActive(true);
+        m_instance.m_releasePopup.Setup(m_releaseSampleText, objectName);
+    }
+
+    /**
+     * Hide the release popup
+     */
+    public static void HideReleasePopup()
+    {
+        m_instance.m_releasePopup.gameObject.SetActive(false);
     }
 
     /**
@@ -74,6 +96,13 @@ public class UIManager : MonoBehaviour
         {
             weaponSlots[weaponSlotIndex].Setup(false, m_instance.m_playerController, weaponSlotIndex, r.GetIcon(), r.GetName(), r.IsSelected());
             weaponSlotIndex++;
+        }
+
+        if (args.m_weaponSlotCount > weaponInventory.Count)
+        {
+            int currentEmptySlotIndex = args.m_weaponSlotCount - (args.m_weaponSlotCount - weaponInventory.Count);
+            for (; currentEmptySlotIndex < args.m_weaponSlotCount; currentEmptySlotIndex++)
+                weaponSlots[currentEmptySlotIndex].Setup(true);
         }
     }
 

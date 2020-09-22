@@ -84,9 +84,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6990124871676780862}
-  - component: {fileID: 8577317915797571646}
+  - component: {fileID: 5694716621612651423}
   m_Layer: 5
-  m_Name: PickUpPopup
+  m_Name: ActionPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,7 +113,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000015258789, y: -96.1}
   m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8577317915797571646
+--- !u!114 &5694716621612651423
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,11 +122,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 486973453946039005}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d62aa10417107548a21dae3ce415aef, type: 3}
+  m_Script: {fileID: 11500000, guid: 2be4b6513db82954481419134aae2299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_backgroundPanel: {fileID: 3129459806005228638}
-  m_text: {fileID: 7385039471210876967}
+  m_message: {fileID: 7385039471210876967}
 --- !u!1 &4114831067257809991
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 6496709805223291571}
   - component: {fileID: 7385039471210876967}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -205,4 +205,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Pick up {object_name} [E]
+  m_Text: '{action_message} [Cmd]'
