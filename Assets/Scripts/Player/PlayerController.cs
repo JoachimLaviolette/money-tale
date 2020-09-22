@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour, IShooter
     [SerializeField]
     private LayerMask m_wallLayerMask;
     [SerializeField]
-    private LayerMask m_damageableObjectsLayers;
+    private LayerMask m_damageableLayer;
     [SerializeField]
     private Camera m_sceneCamera;
     [SerializeField]
@@ -32,20 +32,20 @@ public class PlayerController : MonoBehaviour, IShooter
     [SerializeField]
     private Transform m_bulletPosition;
     private List<Rifle> m_weaponInventory;
-    [SerializeField]
-    [Range(1, 6)]
-    private int m_maxWeaponsAllowed = 4;
+    private int m_maxWeaponsAllowed = 0;
     private int m_currentWeaponIndex;
     private IPickable m_focusedPickableObject;
 
     public EventHandler<OnWeaponInventoryChangedArgs> m_onWeaponInventoryChanged;
-    public EventHandler<OnSelectedWeaponDataChanged> m_onCurrentWeaponDataChanged;
+    public EventHandler<OnSelectedWeaponDataChanged> m_onSelectedWeaponDataChanged;
     public class OnWeaponInventoryChangedArgs: EventArgs
     {
+        public int m_weaponSlotCount;
         public List<Rifle> m_weapons;
     }
     public class OnSelectedWeaponDataChanged : EventArgs
     {
+        public int m_weaponIndex;
         public Rifle m_weapon;
     }
 
@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour, IShooter
         m_isArmed = false;
         m_weaponInventory = new List<Rifle>();
         m_currentWeaponIndex = -1;
+        m_maxWeaponsAllowed = 0;
         m_focusedPickableObject = null;
     }
 
@@ -155,10 +156,10 @@ public class PlayerController : MonoBehaviour, IShooter
                         m_bulletPosition.position,
                         Quaternion.Euler(90f, 0f, 90f - transform.rotation.eulerAngles.y),
                         bulletDirection,
-                        m_damageableObjectsLayers
+                        m_damageableLayer
                     );
 
-                m_onCurrentWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weapon = m_weaponInventory[m_currentWeaponIndex] });
+                m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weapon = m_weaponInventory[m_currentWeaponIndex] });
             }
         }
     }
@@ -226,8 +227,7 @@ public class PlayerController : MonoBehaviour, IShooter
         m_currentWeaponIndex = weaponIndex;
         m_weaponInventory[weaponIndex].SetSelected(true);
         m_animator.SetBool(m_isArmedHash, true);
-        m_onWeaponInventoryChanged?.Invoke(this, new OnWeaponInventoryChangedArgs { m_weapons = m_weaponInventory });
-        m_onCurrentWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weapon = m_weaponInventory[m_currentWeaponIndex] });
+        m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
     }
 
     /**
@@ -236,13 +236,15 @@ public class PlayerController : MonoBehaviour, IShooter
     public void UnEquip(int weaponIndex)
     {
         m_isArmed = false;
-        m_currentWeaponIndex = -1;
         m_weaponInventory[weaponIndex].SetSelected(false);
         m_animator.SetBool(m_isArmedHash, false);
-        m_onWeaponInventoryChanged?.Invoke(this, new OnWeaponInventoryChangedArgs { m_weapons = m_weaponInventory });
-        m_onCurrentWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weapon = null });
+        m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weaponIndex = m_currentWeaponIndex, m_weapon = null });
+        m_currentWeaponIndex = -1;
     }
 
+    /**
+     * Handle the collision between the player and another object
+     */
     private void OnTriggerEnter(Collider collider)
     {
         IPickable pickableObject = collider.GetComponent<IPickable>();
@@ -254,6 +256,9 @@ public class PlayerController : MonoBehaviour, IShooter
         }
     }
 
+    /**
+     * Handle the collision exit between the player and another object
+     */
     private void OnTriggerExit(Collider collider)
     {
         IPickable pickableObject = collider.GetComponent<IPickable>();
@@ -274,17 +279,30 @@ public class PlayerController : MonoBehaviour, IShooter
 
         if (m_focusedPickableObject is Rifle r)
         {
-            if (m_weaponInventory.Count < m_maxWeaponsAllowed)
+            if (m_maxWeaponsAllowed > 0 && m_weaponInventory.Count < m_maxWeaponsAllowed)
             {
                 m_weaponInventory.Add(r);
-                m_onWeaponInventoryChanged?.Invoke(this, new OnWeaponInventoryChangedArgs { m_weapons = m_weaponInventory });
+                m_onWeaponInventoryChanged?.Invoke(this, new OnWeaponInventoryChangedArgs { m_weaponSlotCount = m_maxWeaponsAllowed, m_weapons = m_weaponInventory });
             }
             else return;
+        }
+        else if (m_focusedPickableObject is Slot)
+        {
+            m_maxWeaponsAllowed++;
+            m_onWeaponInventoryChanged?.Invoke(this, new OnWeaponInventoryChangedArgs { m_weaponSlotCount = m_maxWeaponsAllowed, m_weapons = m_weaponInventory });
         }
 
         UIManager.HidePickUpPopup();
         m_focusedPickableObject.PickUp();
         m_focusedPickableObject = null;
+    }
+
+    /**
+     * Return the maximum of weapons allowed
+     */
+    public int GetMaxWeaponsCount()
+    {
+        return m_maxWeaponsAllowed;
     }
 
     /**

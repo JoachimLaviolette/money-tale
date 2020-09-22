@@ -19,10 +19,11 @@ public class WeaponSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     private Sprite m_strokeRegular;
     [SerializeField]
     private Sprite m_strokeSelected;
-    private bool m_isEmpty = true;
+    private bool m_isEmpty;
 
     private void Start()
     {
+        m_isEmpty = true;
         Disable();
     }
 
@@ -37,17 +38,24 @@ public class WeaponSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             m_icon.sprite = null;
             m_name.text = "";
             m_isSelected = false;
+            Disable();
         } 
         else
         {
-            Enable();
             m_playerController = playerController;
             m_index = index;
             m_icon.sprite = icon;
             m_name.text = name.ToUpper();
             m_isSelected = isSelected;
+            Enable();
         }
 
+        SetSelected(m_isSelected);
+    }
+
+    public void SetSelected(bool isSelected)
+    {
+        m_isSelected = isSelected;
         m_stroke.sprite = m_isSelected ? m_strokeSelected : m_strokeRegular;
     }
 

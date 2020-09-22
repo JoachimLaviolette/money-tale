@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Transform m_weaponInventoryContainer;
     [SerializeField]
+    private WeaponSlot m_weaponSlot;
+    [SerializeField]
     private WeaponData m_selectedWeaponData;
     [SerializeField]
     private PlayerController m_playerController;
@@ -25,8 +27,9 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         Cursor.SetCursor(m_instance.m_mouseCursorTexture, Vector2.zero, CursorMode.ForceSoftware);
+        SetupWeaponInventory();
         m_instance.m_playerController.m_onWeaponInventoryChanged += UpdateWeaponInventory;
-        m_instance.m_playerController.m_onCurrentWeaponDataChanged += UpdateSelectedWeaponData;
+        m_instance.m_playerController.m_onSelectedWeaponDataChanged += UpdateSelectedWeaponData;
     }
 
     /**
@@ -47,17 +50,29 @@ public class UIManager : MonoBehaviour
     }
 
     /**
+     * Setup the weapon inventory
+     */
+    private void SetupWeaponInventory()
+    {
+        for (int x = 0; x < m_instance.m_playerController.GetMaxWeaponsCount() - m_instance.m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>().Length; x++)
+            Instantiate(m_instance.m_weaponSlot, Vector3.zero, Quaternion.identity, m_instance.m_weaponInventoryContainer);
+    }
+
+    /**
      * Update the weapon inventory
      */
     private void UpdateWeaponInventory(object sender, PlayerController.OnWeaponInventoryChangedArgs args)
     {
-        WeaponSlot[] weaponSlots = m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>(); 
+        if (args.m_weaponSlotCount > m_instance.m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>().Length)
+            SetupWeaponInventory();       
+
+        WeaponSlot[] weaponSlots = m_instance.m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>(); 
         List<Rifle> weaponInventory = args.m_weapons;
         int weaponSlotIndex = 0;
-
+        
         foreach (Rifle r in weaponInventory)
         {
-            weaponSlots[weaponSlotIndex].Setup(false, m_playerController, weaponSlotIndex, r.GetIcon(), r.GetName(), r.IsSelected()); ;
+            weaponSlots[weaponSlotIndex].Setup(false, m_instance.m_playerController, weaponSlotIndex, r.GetIcon(), r.GetName(), r.IsSelected());
             weaponSlotIndex++;
         }
     }
@@ -67,6 +82,7 @@ public class UIManager : MonoBehaviour
      */
     private void UpdateSelectedWeaponData(object sender, PlayerController.OnSelectedWeaponDataChanged args)
     {
-        m_selectedWeaponData.Setup(args.m_weapon);
+        m_instance.m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>()[args.m_weaponIndex].SetSelected(args.m_weapon != null);
+        m_instance.m_selectedWeaponData.Setup(args.m_weapon);
     }
 }
