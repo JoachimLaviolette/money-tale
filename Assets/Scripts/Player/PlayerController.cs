@@ -100,6 +100,8 @@ public class PlayerController : MonoBehaviour, IShooter
      */
     private void HandleMoveInputs(ref float h, ref float v)
     {
+        if (m_isShooting) return;
+
         if (!(Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow)
                     || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)
                     || Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow)
@@ -202,6 +204,8 @@ public class PlayerController : MonoBehaviour, IShooter
      */
     private void Move(float h, float v)
     {
+        if (m_isShooting) return;
+
         transform.Translate(new Vector3(h, 0f, v) * m_acceleration * Time.deltaTime, Space.Self);
     }
 
@@ -210,6 +214,17 @@ public class PlayerController : MonoBehaviour, IShooter
      */
     private void Animate(float h, float v)
     {
+        if (m_isShooting)
+        {
+            m_animator.SetBool(m_isRunningForwardHash, false);
+            m_animator.SetBool(m_isRunningBackwardHash, false);
+            m_animator.SetBool(m_isRunningLeftHash, false);
+            m_animator.SetBool(m_isRunningRightHash, false);
+            m_animator.SetBool(m_isArmedHash, true);
+
+            return;
+        }
+
         m_animator.SetBool(m_isRunningForwardHash, v > 0f);
         m_animator.SetBool(m_isRunningBackwardHash, v < 0f);
         m_animator.SetBool(m_isRunningLeftHash, h < 0f);
@@ -221,6 +236,8 @@ public class PlayerController : MonoBehaviour, IShooter
      */
     private void Rotate()
     {
+        if (m_isShooting) return;
+
         Vector3 newPosition = m_sceneCamera.ScreenToWorldPoint(Input.mousePosition);
         newPosition.y = transform.position.y;
         m_sceneCamera.transform.LookAt(m_sceneCamera.transform);
