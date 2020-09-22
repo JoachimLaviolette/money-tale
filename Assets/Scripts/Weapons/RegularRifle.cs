@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RegularRifle: Rifle
 {
@@ -15,7 +16,8 @@ public class RegularRifle: Rifle
         Vector3 bulletPosition,
         Quaternion bulletRotation,
         Vector3 bulletDirection,
-        LayerMask damageableLayer)
+        LayerMask damageableLayer,
+        UnityAction setShootingDone)
     {
         StartCoroutine(FireBullet(
             bulletFirePosition,
@@ -23,7 +25,8 @@ public class RegularRifle: Rifle
             bulletPosition,
             bulletRotation,
             bulletDirection,
-            damageableLayer));
+            damageableLayer,
+            setShootingDone));
     }
 
     private IEnumerator FireBullet(
@@ -32,7 +35,8 @@ public class RegularRifle: Rifle
         Vector3 bulletPosition,
         Quaternion bulletRotation,
         Vector3 bulletDirection,
-        LayerMask damageableLayer)
+        LayerMask damageableLayer,
+        UnityAction setShootingDone)
     {
         m_weaponAmmo--;
         Transform bulletFire = Instantiate(AssetManager.BulletFire(), bulletFirePosition, bulletFireRotation);
@@ -40,5 +44,6 @@ public class RegularRifle: Rifle
         bullet.Setup(false, bulletDirection, m_bulletSpeed, m_damages, damageableLayer);
         yield return new WaitForSeconds(0.15f);
         Destroy(bulletFire.gameObject);
+        setShootingDone.Invoke();
     }
 }

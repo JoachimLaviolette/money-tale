@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour, IShooter
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour, IShooter
         m_detectionDistanceLeft = 0.5f,
         m_detectionDistanceRight = 0.5f;
     private bool m_isArmed;
+    private bool m_isShooting;
     [SerializeField]
     private LayerMask environmentLayerMask;
     [SerializeField]
@@ -58,6 +60,7 @@ public class PlayerController : MonoBehaviour, IShooter
         m_isRunningRightHash = Animator.StringToHash("is_running_right");
         m_isArmedHash = Animator.StringToHash("is_armed");
         m_isArmed = false;
+        m_isShooting = false;
         m_weaponInventory = new List<Rifle>();
         m_currentWeaponIndex = -1;
         m_maxWeaponsAllowed = 0;
@@ -144,22 +147,36 @@ public class PlayerController : MonoBehaviour, IShooter
      */
     public void Shoot()
     {
-        if (m_isArmed && m_currentWeaponIndex != -1)
+        if (m_isArmed && m_currentWeaponIndex != -1 && !m_isShooting)
         {
             if (m_weaponInventory[m_currentWeaponIndex].CanFire())
             {
+                m_isShooting = true;
+
+                m_setShootingDone += SetShootingDone;
+
                 m_weaponInventory[m_currentWeaponIndex].Fire(
                         m_bulletFirePosition.position,
                         Quaternion.Euler(90f, 0f, -transform.rotation.eulerAngles.y),
                         m_bulletPosition.position,
                         Quaternion.Euler(90f, 0f, 90f - transform.rotation.eulerAngles.y),
                         (m_sceneCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position),
-                        m_damageableLayer
+                        m_damageableLayer,
+                        m_setShootingDone
                     );
 
                 m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
             }
         }
+    }
+
+    /**
+     * Action called as delegate to control the shooting state of the player
+     */
+    private UnityAction m_setShootingDone;
+    private void SetShootingDone()
+    {
+        m_isShooting = false;
     }
 
     /**

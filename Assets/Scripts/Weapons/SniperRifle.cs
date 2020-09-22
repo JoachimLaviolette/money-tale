@@ -1,5 +1,6 @@
 ﻿using System.Collections;
-using UnityEngine; 
+using UnityEngine;
+using UnityEngine.Events;
 
 public class SniperRifle: Rifle
 {
@@ -15,7 +16,8 @@ public class SniperRifle: Rifle
         Vector3 bulletPosition,
         Quaternion bulletRotation,
         Vector3 bulletDirection,
-        LayerMask damageableLayer)
+        LayerMask damageableLayer,
+        UnityAction setShootingDone)
     {
         StartCoroutine(FireLaser(
             bulletFirePosition,
@@ -23,7 +25,8 @@ public class SniperRifle: Rifle
             bulletPosition,
             bulletRotation,
             bulletDirection,
-            damageableLayer));
+            damageableLayer,
+            setShootingDone));
     }
 
     private IEnumerator FireLaser(
@@ -32,7 +35,8 @@ public class SniperRifle: Rifle
         Vector3 bulletPosition,
         Quaternion bulletRotation,
         Vector3 bulletDirection,
-        LayerMask damageableLayer)
+        LayerMask damageableLayer,
+        UnityAction setShootingDone)
     {
         m_weaponAmmo--;
         Transform bulletFire = Instantiate(AssetManager.BulletFire(), bulletFirePosition, bulletFireRotation);
@@ -41,5 +45,6 @@ public class SniperRifle: Rifle
         yield return new WaitForSeconds(0.5f);
         Destroy(bulletFire.gameObject);
         Destroy(bullet.gameObject);
+        setShootingDone.Invoke();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class Rifle: MonoBehaviour, IPickable, IReleasable
 {
@@ -18,13 +19,17 @@ public abstract class Rifle: MonoBehaviour, IPickable, IReleasable
     [Range(1, 20)] 
     protected int m_weaponMaxAmmo;
     protected int m_weaponAmmo;
+    [SerializeField]
+    [Range(1, 3)]
     protected int m_bulletRatio = 1; // how many bullets are shot within one shot
-    protected bool m_isSelected = false;
-    private float m_yTranslation = 10f;
+    protected bool m_isSelected;
+    private float m_yTranslation;
 
     virtual protected void Start()
     {
         m_weaponAmmo = m_weaponMaxAmmo;
+        m_isSelected = false;
+        m_yTranslation = 10f;
     }
 
     abstract public void Fire(
@@ -33,7 +38,8 @@ public abstract class Rifle: MonoBehaviour, IPickable, IReleasable
         Vector3 bulletPosition,
         Quaternion bulletRotation,
         Vector3 bulletDirection,
-        LayerMask damageableLayer);
+        LayerMask damageableLayer,
+        UnityAction setShootingDone);
 
     /**
      * Retun if the rifle can still fire a bullet
