@@ -107,7 +107,7 @@ public class UIManager : MonoBehaviour
     /**
      * Update the currently carried weapon data
      */
-    private void UpdateSelectedWeaponData(object sender, PlayerController.OnSelectedWeaponDataChanged args)
+    private void UpdateSelectedWeaponData(object sender, PlayerController.OnSelectedWeaponDataChangedArgs args)
     {
         m_instance.m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>()[args.m_weaponIndex].SetSelected(args.m_weapon != null);
         m_instance.m_selectedWeaponData.Setup(args.m_weapon);

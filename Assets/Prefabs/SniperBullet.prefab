@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 7530419554556108637}
   - component: {fileID: 1610365159627836592}
   - component: {fileID: 1168961105074947840}
-  - component: {fileID: 5771376372325546359}
+  - component: {fileID: 874483687009894860}
   m_Layer: 0
   m_Name: SniperBullet
   m_TagString: Untagged
@@ -178,8 +178,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.48623097, y: 0.069347724, z: 0.67452675}
-  m_Center: {x: -0.00042110682, y: -0.0023989603, z: 0.33001208}
+  m_Size: {x: 30, y: 1.23, z: 0.16982515}
+  m_Center: {x: -0.00999999, y: 0.01, z: -0.0020341426}
 --- !u!114 &1168961105074947840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_outerLimitLayerMask:
     serializedVersion: 2
     m_Bits: 2048
---- !u!54 &5771376372325546359
+--- !u!54 &874483687009894860
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

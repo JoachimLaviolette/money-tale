@@ -12,7 +12,6 @@ public class SniperBullet : Bullet
      */
     override public void Setup(bool isStatic, Vector3 direction, float speed, float damages, LayerMask damageableLayer, bool destroyAfterDamage = true)
     {
-        base.Setup(isStatic, direction, speed, damages, damageableLayer, destroyAfterDamage);
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.right), out RaycastHit hit, Mathf.Infinity, m_outerLimitLayerMask))
         {
             m_anchor.localScale = new Vector3(
@@ -20,5 +19,6 @@ public class SniperBullet : Bullet
             m_anchor.localScale.y,
             m_anchor.localScale.z);
         }       
+        base.Setup(isStatic, direction, speed, damages, damageableLayer, destroyAfterDamage);
     }
 }

@@ -39,13 +39,13 @@ public class PlayerController : MonoBehaviour, IShooter
     private IPickable m_focusedPickableObject;
 
     public EventHandler<OnWeaponInventoryChangedArgs> m_onWeaponInventoryChanged;
-    public EventHandler<OnSelectedWeaponDataChanged> m_onSelectedWeaponDataChanged;
+    public EventHandler<OnSelectedWeaponDataChangedArgs> m_onSelectedWeaponDataChanged;
     public class OnWeaponInventoryChangedArgs: EventArgs
     {
         public int m_weaponSlotCount;
         public List<Rifle> m_weapons;
     }
-    public class OnSelectedWeaponDataChanged : EventArgs
+    public class OnSelectedWeaponDataChangedArgs : EventArgs
     {
         public int m_weaponIndex;
         public Rifle m_weapon;
@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour, IShooter
                         m_setShootingDone
                     );
 
-                m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
+                m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
             }
         }
     }
@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour, IShooter
         m_currentWeaponIndex = weaponIndex;
         m_weaponInventory[weaponIndex].SetSelected(true);
         m_animator.SetBool(m_isArmedHash, true);
-        m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
+        m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
         
         if (m_weaponInventory[weaponIndex] is IReleasable && m_weaponInventory[weaponIndex] is IPickable)
             UIManager.DisplayReleasePopup(((IPickable) m_weaponInventory[weaponIndex]).GetName());
@@ -273,7 +273,7 @@ public class PlayerController : MonoBehaviour, IShooter
         m_isArmed = false;
         m_weaponInventory[weaponIndex].SetSelected(false);
         m_animator.SetBool(m_isArmedHash, false);
-        m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChanged { m_weaponIndex = m_currentWeaponIndex, m_weapon = null });
+        m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = null });
         m_currentWeaponIndex = -1;
     }
 

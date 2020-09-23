@@ -42,8 +42,8 @@ public class RegularRifle: Rifle
         Transform bulletFire = Instantiate(AssetManager.BulletFire(), bulletFirePosition, bulletFireRotation);
         Bullet bullet = Instantiate(AssetManager.RegularBullet(), bulletPosition, bulletRotation);
         bullet.Setup(false, bulletDirection, m_bulletSpeed, m_damages, damageableLayer);
+        yield return new WaitForSeconds(0.05f);
         setShootingDone.Invoke();
-        yield return new WaitForSeconds(0.15f);
         Destroy(bulletFire.gameObject);
     }
 }
