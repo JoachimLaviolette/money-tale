@@ -166,5 +166,29 @@ public class EnemyController : MonoBehaviour, IShooter
             m_enemy.enabled = false;
             m_enemyScan.enabled = false;
         }
+
+        ReleaseBlood(transform.position, args.m_enemyState == Enemy.State.Dead);
+    }
+
+    /**
+     * Release some blood around the given position, more if for death
+     */
+    private void ReleaseBlood(Vector3 position, bool forDeath)
+    {
+        for (int x = 0; x < UnityEngine.Random.Range(1, 4); x++)
+        {
+            Transform blood = Instantiate(
+                AssetManager.Blood(),
+                position + new Vector3(UnityEngine.Random.Range(-0.35f, 0.35f), 0f,
+                UnityEngine.Random.Range(-0.35f, 0.35f)),
+                Quaternion.Euler(90f, UnityEngine.Random.Range(0f, 360f), 0f),
+                AssetManager.BloodVFXContainer());
+
+            float randomScaleFactor = forDeath ? UnityEngine.Random.Range(0.6f, 1f) : UnityEngine.Random.Range(0.1f, 0.6f);
+            blood.localScale = new Vector3(
+                randomScaleFactor,
+                randomScaleFactor,
+                1f);
+        }        
     }
 }

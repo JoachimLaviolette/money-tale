@@ -1684,6 +1684,8 @@ MonoBehaviour:
   m_bulletFire: {fileID: 7756548820811931932, guid: fd13e096236885e4f8896c79fd5f36b9, type: 3}
   m_regularBullet: {fileID: 5138631454579227600, guid: 3e91a6ee1cf988443a51819005dc1006, type: 3}
   m_sniperBullet: {fileID: 1168961105074947840, guid: e042ffd205227684bacfdf547ab9fa01, type: 3}
+  m_bloodVFXContainer: {fileID: 1239429396}
+  m_blood: {fileID: 6025636918775558414, guid: c25dfaa41ec0f5f44a1fd5ef37ab647b, type: 3}
 --- !u!4 &617428037
 Transform:
   m_ObjectHideFlags: 0
@@ -3090,6 +3092,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8338720103316245084, guid: 2d1bad16d2a6ac848af25be9470d8bb7, type: 3}
   m_PrefabInstance: {fileID: 1237715679}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1239429395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1239429396}
+  m_Layer: 0
+  m_Name: BloodVFXContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1239429396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239429395}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1251752625
 GameObject:
   m_ObjectHideFlags: 0
