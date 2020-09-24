@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour, IShooter
     private float m_prevH = 0f;
     private float m_prevV = 0f;
     [SerializeField]
-    private float m_acceleration = 0.1f;
+    private float m_moveSpeed = 0.1f;
     [SerializeField] 
     private float m_detectionDistanceForward = 0.5f,
         m_detectionDistanceBackward = 0.5f,
@@ -206,7 +206,7 @@ public class PlayerController : MonoBehaviour, IShooter
     {
         if (m_isShooting) return;
 
-        transform.Translate(new Vector3(h, 0f, v) * m_acceleration * Time.deltaTime, Space.Self);
+        transform.Translate(new Vector3(h, 0f, v) * m_moveSpeed * Time.deltaTime, Space.Self);
     }
 
     /**
