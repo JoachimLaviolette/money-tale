@@ -7,6 +7,8 @@ using UnityEngine.Events;
 
 public class EnemyController : MonoBehaviour, IShooter
 {
+    [SerializeField]
+    private Camera m_sceneCamera;
     private Animator m_animator;
     private int m_isAimingHash;
     private int m_isWalkingForwardHash;
@@ -85,6 +87,7 @@ public class EnemyController : MonoBehaviour, IShooter
     {
         LookForNextTarget();
         Animate();
+        Rotate();
         Move();
     }
 
@@ -136,11 +139,24 @@ public class EnemyController : MonoBehaviour, IShooter
     }
 
     /**
+     * Rotate the enemy towards the given target
+     */
+    private void Rotate()
+    {
+        if (m_currentTarget == null) return;
+
+        Vector3 newRotation = m_currentTarget.position;
+        newRotation.y = transform.position.y;
+        transform.LookAt(newRotation);
+    }
+
+    /**
      * Move the enemy towards its current target if any
      */
     private void Move()
     {
-        if (m_currentTarget != null) m_agent.SetDestination(m_currentTarget.position);
+        if (m_currentTarget != null) 
+            m_agent.SetDestination(m_currentTarget.position);
     }
 
     /**
@@ -243,14 +259,6 @@ public class EnemyController : MonoBehaviour, IShooter
 
         callback?.Invoke();
         yield return null;
-    }
-
-    /**
-     * Rotate the enemy
-     */
-    private void Rotate(Vector3 target)
-    {
-
     }
 
     /**

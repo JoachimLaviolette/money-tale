@@ -238,10 +238,9 @@ public class PlayerController : MonoBehaviour, IShooter
     {
         if (m_isShooting) return;
 
-        Vector3 newPosition = m_sceneCamera.ScreenToWorldPoint(Input.mousePosition);
-        newPosition.y = transform.position.y;
-        m_sceneCamera.transform.LookAt(m_sceneCamera.transform);
-        transform.LookAt(newPosition);  
+        Vector3 newRotation = m_sceneCamera.ScreenToWorldPoint(Input.mousePosition);
+        newRotation.y = transform.position.y;
+        transform.LookAt(newRotation);  
     }
 
     /**

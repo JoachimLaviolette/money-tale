@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35677425242f2ad4a98892c91387fa43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_sceneCamera: {fileID: 0}
   m_waypointsTransform: {fileID: 0}
   m_bulletFirePosition: {fileID: 2027242970037336847}
   m_bulletPosition: {fileID: 5071150637883863203}
