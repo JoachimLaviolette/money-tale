@@ -12,12 +12,12 @@ public class Player : MonoBehaviour, IDamageable
     /**
      * Damage the player
      */
-    public void Damage(float damages)
+    public void Damage(float damages, Transform damagerTransform)
     {
         m_hp -= damages;
 
         if (m_hp < 0f) m_hp = 0f;
 
-        Debug.Log(string.Format("Player has lost {0} HP, falling back to {1} HP.", damages, m_hp));
+        // Debug.Log(string.Format("Player has lost {0} HP, falling back to {1} HP.", damages, m_hp));
     }
 }

@@ -33,13 +33,14 @@ public abstract class Rifle: MonoBehaviour, IPickable, IReleasable
     }
 
     abstract public void Fire(
+        Transform shooterTransform,
         Vector3 bulletFirePosition,
         Quaternion bulletFireRotation,
         Vector3 bulletPosition,
         Quaternion bulletRotation,
         Vector3 bulletDirection,
-        LayerMask damageableLayer,
-        UnityAction setShootingDone);
+        LayerMask damageableLayerMask,
+        UnityAction setShootingDone = null);
 
     /**
      * Retun if the rifle can still fire a bullet

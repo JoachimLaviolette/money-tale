@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bffbf031800cab489611e544a29293d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_onDestroyLayers:
+  m_onDestroyLayerMasks:
   - serializedVersion: 2
     m_Bits: 1024
   - serializedVersion: 2

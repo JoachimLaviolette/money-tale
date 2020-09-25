@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
@@ -13,6 +12,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public class OnEnemyDamagedArgs : EventArgs
     {
         public State m_enemyState;
+        public Transform m_damagerTransform;
     }
     public EventHandler<OnEnemyDamagedArgs> m_onEnemyDamaged;
 
@@ -24,14 +24,14 @@ public class Enemy : MonoBehaviour, IDamageable
     /**
      * Damage the enemy
      */
-    public void Damage(float damages)
+    public void Damage(float damages, Transform damagerTransform)
     {
         m_hp -= damages;
 
         if (m_hp < 0f) m_hp = 0f;
 
-        m_onEnemyDamaged?.Invoke(this, new OnEnemyDamagedArgs { m_enemyState = m_hp == 0f ? State.Dead : State.Damaged });
+        m_onEnemyDamaged?.Invoke(this, new OnEnemyDamagedArgs { m_enemyState = m_hp == 0f ? State.Dead : State.Damaged, m_damagerTransform = damagerTransform });
         
-        Debug.Log(string.Format("Enemy {0} has lost {1} HP, falling back to {2} HP.", gameObject.name, damages, m_hp));
+        // Debug.Log(string.Format("Enemy {0} has lost {1} HP, falling back to {2} HP.", gameObject.name, damages, m_hp));
     }
 }

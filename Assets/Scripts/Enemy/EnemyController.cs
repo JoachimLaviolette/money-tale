@@ -36,12 +36,23 @@ public class EnemyController : MonoBehaviour, IShooter
     private EnemyScan m_enemyScan;
     [SerializeField]
     private LayerMask m_deadLayerMask;
+    [SerializeField]
+    private LayerMask m_playerLayerMask;
+    [SerializeField]
+    private LayerMask m_damageableLayerMask;
+    [SerializeField]
+    private LayerMask m_shootingLayerMasks;
     private NavMeshAgent m_agent;
     [SerializeField]
     private float m_walkSpeed = 2.5f;
     [SerializeField]
     private float m_runSpeed = 4.5f;
     private State m_currentState;
+    [SerializeField]
+    [Range(1.5f, 10f)]
+    private float m_shootMaxDetectionDistance;
+    [SerializeField]
+    private Rifle m_weapon;
 
     private enum State
     {
@@ -89,6 +100,7 @@ public class EnemyController : MonoBehaviour, IShooter
         Animate();
         Rotate();
         Move();
+        Shoot();
     }
 
     /**
@@ -155,6 +167,8 @@ public class EnemyController : MonoBehaviour, IShooter
      */
     private void Move()
     {
+        if (m_isShooting) return;
+
         if (m_currentTarget != null) 
             m_agent.SetDestination(m_currentTarget.position);
     }
@@ -266,7 +280,32 @@ public class EnemyController : MonoBehaviour, IShooter
      */
     public void Shoot()
     {
+        if (m_isShooting) return;
+        if (m_currentTarget == null) return;
+        if (1 << m_currentTarget.gameObject.layer != m_playerLayerMask) return;
 
+        m_currentState = State.Running;
+        m_agent.speed = m_runSpeed;
+        Vector3 direction = m_currentTarget.position - transform.position;
+
+        Debug.DrawRay(transform.position, direction.normalized * m_shootMaxDetectionDistance);
+        if (!Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, m_shootMaxDetectionDistance, m_shootingLayerMasks)) return;
+        if (1 << hit.collider.gameObject.layer != m_playerLayerMask) return;
+
+        m_currentState = State.IdleAim;
+        m_agent.speed = 0f;
+
+        m_isShooting = true;
+        m_weapon.Fire(
+                transform, 
+                m_bulletFirePosition.position,
+                Quaternion.Euler(90f, 0f, -transform.rotation.eulerAngles.y),
+                m_bulletPosition.position,
+                Quaternion.Euler(90f, 0f, 90f - transform.rotation.eulerAngles.y),
+                direction,
+                m_damageableLayerMask,
+                () => m_isShooting = false
+            );      
     }
 
     /**
@@ -297,7 +336,8 @@ public class EnemyController : MonoBehaviour, IShooter
         {
             // Play damaged anim
             m_currentState = State.Damaged;
-            StartCoroutine(Animate(State.Damaged, () => m_currentState = State.IdleAim));
+            StartCoroutine(Animate(State.Damaged, () => m_currentState = State.Running));
+            m_currentTarget = args.m_damagerTransform;
         }
         else
         {
@@ -334,5 +374,17 @@ public class EnemyController : MonoBehaviour, IShooter
                 randomScaleFactor,
                 1f);
         }        
+    }
+
+    /**
+     * Draw Gizmos in scene view
+     */
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * 0.7f);
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.back) * 0.3f);
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.left) * 0.3f);
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.right) * 0.3f);
     }
 }

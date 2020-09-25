@@ -1,4 +1,6 @@
-﻿public interface IDamageable
+﻿using UnityEngine;
+
+public interface IDamageable
 {
-    void Damage(float amount);
+    void Damage(float amount, Transform damagerTransform);
 }

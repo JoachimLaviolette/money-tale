@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour, IShooter
@@ -26,7 +25,7 @@ public class PlayerController : MonoBehaviour, IShooter
     [SerializeField]
     private LayerMask environmentLayerMask;
     [SerializeField]
-    private LayerMask m_damageableLayer;
+    private LayerMask m_damageableLayerMask;
     [SerializeField]
     private Camera m_sceneCamera;
     [SerializeField]
@@ -40,7 +39,7 @@ public class PlayerController : MonoBehaviour, IShooter
 
     public EventHandler<OnWeaponInventoryChangedArgs> m_onWeaponInventoryChanged;
     public EventHandler<OnSelectedWeaponDataChangedArgs> m_onSelectedWeaponDataChanged;
-    public class OnWeaponInventoryChangedArgs: EventArgs
+    public class OnWeaponInventoryChangedArgs : EventArgs
     {
         public int m_weaponSlotCount;
         public List<Rifle> m_weapons;
@@ -149,36 +148,24 @@ public class PlayerController : MonoBehaviour, IShooter
      */
     public void Shoot()
     {
-        if (m_isArmed && m_currentWeaponIndex != -1 && !m_isShooting)
-        {
-            if (m_weaponInventory[m_currentWeaponIndex].CanFire())
-            {
-                m_isShooting = true;
+        if (!m_isArmed) return;
+        if (m_currentWeaponIndex == -1) return;
+        if (m_isShooting) return;
+        if (!m_weaponInventory[m_currentWeaponIndex].CanFire()) return;
 
-                m_setShootingDone += SetShootingDone;
+        m_isShooting = true;
+        m_weaponInventory[m_currentWeaponIndex].Fire(
+                transform,
+                m_bulletFirePosition.position,
+                Quaternion.Euler(90f, 0f, -transform.rotation.eulerAngles.y),
+                m_bulletPosition.position,
+                Quaternion.Euler(90f, 0f, 90f - transform.rotation.eulerAngles.y),
+                (m_sceneCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position),
+                m_damageableLayerMask,
+                () => m_isShooting = false
+            );
 
-                m_weaponInventory[m_currentWeaponIndex].Fire(
-                        m_bulletFirePosition.position,
-                        Quaternion.Euler(90f, 0f, -transform.rotation.eulerAngles.y),
-                        m_bulletPosition.position,
-                        Quaternion.Euler(90f, 0f, 90f - transform.rotation.eulerAngles.y),
-                        (m_sceneCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position),
-                        m_damageableLayer,
-                        m_setShootingDone
-                    );
-
-                m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
-            }
-        }
-    }
-
-    /**
-     * Action called as delegate to control the shooting state of the player
-     */
-    private UnityAction m_setShootingDone;
-    private void SetShootingDone()
-    {
-        m_isShooting = false;
+        m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
     }
 
     /**

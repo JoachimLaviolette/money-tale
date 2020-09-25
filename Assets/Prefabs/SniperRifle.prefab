@@ -48,9 +48,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_icon: {fileID: 21300000, guid: 11b29d2a8a36f8a418d6818e711d1b60, type: 3}
   m_damages: 100
-  m_fireRate: 1
+  m_fireRate: 0.5
   m_bulletSpeed: 45
   m_weaponMaxAmmo: 20
+  m_bulletRatio: 1
 --- !u!212 &-2836931219188247887
 SpriteRenderer:
   m_ObjectHideFlags: 0
