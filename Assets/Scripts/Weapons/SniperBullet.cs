@@ -10,9 +10,9 @@ public class SniperBullet : Bullet
     /**
      * Setup the bullet
      */
-    override public void Setup(bool isStatic, Vector3 direction, float speed, float damages, Transform shooterTransform, LayerMask damageableLayerMask, bool destroyAfterDamage = true)
+    override public void Setup(bool isStatic, Vector3 direction, float speed, float damages, DamageType damageType,  Transform shooterTransform, LayerMask damageableLayerMask, bool destroyAfterDamage = true)
     {
-        base.Setup(isStatic, direction, speed, damages, shooterTransform, damageableLayerMask, destroyAfterDamage);
+        base.Setup(isStatic, direction, speed, damages, damageType, shooterTransform, damageableLayerMask, destroyAfterDamage);
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.right), out RaycastHit hit, Mathf.Infinity, m_outerLimitLayerMask))
         {
             m_anchor.localScale = new Vector3(

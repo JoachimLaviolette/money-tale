@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         public State m_enemyState;
         public Transform m_damagerTransform;
+        public DamageType m_damageType;
     }
     public EventHandler<OnEnemyDamagedArgs> m_onEnemyDamaged;
 
@@ -24,13 +25,17 @@ public class Enemy : MonoBehaviour, IDamageable
     /**
      * Damage the enemy
      */
-    public void Damage(float damages, Transform damagerTransform)
+    public void Damage(float damages, Transform damagerTransform, DamageType damageType)
     {
         m_hp -= damages;
 
         if (m_hp < 0f) m_hp = 0f;
 
-        m_onEnemyDamaged?.Invoke(this, new OnEnemyDamagedArgs { m_enemyState = m_hp == 0f ? State.Dead : State.Damaged, m_damagerTransform = damagerTransform });
+        m_onEnemyDamaged?.Invoke(this, new OnEnemyDamagedArgs { 
+            m_enemyState = m_hp == 0f ? State.Dead : State.Damaged, 
+            m_damagerTransform = damagerTransform,
+            m_damageType = damageType,
+        });
         
         // Debug.Log(string.Format("Enemy {0} has lost {1} HP, falling back to {2} HP.", gameObject.name, damages, m_hp));
     }

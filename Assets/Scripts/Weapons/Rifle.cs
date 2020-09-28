@@ -22,6 +22,8 @@ public abstract class Rifle: MonoBehaviour, IPickable, IReleasable
     [SerializeField]
     [Range(1, 3)]
     protected int m_bulletRatio = 1; // how many bullets are shot within one shot
+    [SerializeField]
+    protected DamageType m_damageType;
     protected bool m_isSelected;
     private float m_yTranslation;
 

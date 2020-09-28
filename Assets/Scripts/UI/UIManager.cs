@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
      */
     private void SetupWeaponInventory()
     {
-        for (int x = 0; x < m_instance.m_playerController.GetMaxWeaponsCount() - m_instance.m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>().Length; x++)
+        for (int x = 0; x < m_instance.m_playerController.GetMaxWeaponsAllowed() - m_instance.m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>().Length; x++)
             Instantiate(m_instance.m_weaponSlot, Vector3.zero, Quaternion.identity, m_instance.m_weaponInventoryContainer);
     }
 

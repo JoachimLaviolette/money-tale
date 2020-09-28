@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour, IShooter
     private int m_isRunningLeftHash;
     private int m_isRunningRightHash;
     private int m_isArmedHash;
+    private int m_isDeadHash;
     private float m_prevH = 0f;
     private float m_prevV = 0f;
     [SerializeField]
@@ -25,13 +26,16 @@ public class PlayerController : MonoBehaviour, IShooter
     [SerializeField]
     private LayerMask environmentLayerMask;
     [SerializeField]
-    private LayerMask m_damageableLayerMask;
+    private LayerMask m_damageableLayerMask; 
     [SerializeField]
+    private LayerMask m_deadLayerMask; 
+     [SerializeField]
     private Camera m_sceneCamera;
     [SerializeField]
     private Transform m_bulletFirePosition;
     [SerializeField]
     private Transform m_bulletPosition;
+    private Player m_player;
     private List<Rifle> m_weaponInventory;
     private int m_maxWeaponsAllowed = 0;
     private int m_currentWeaponIndex;
@@ -53,17 +57,20 @@ public class PlayerController : MonoBehaviour, IShooter
     private void Start()
     {
         m_animator = GetComponent<Animator>();
+        m_player = GetComponent<Player>();
         m_isRunningForwardHash = Animator.StringToHash("is_running_forward");
         m_isRunningBackwardHash = Animator.StringToHash("is_running_backward");
         m_isRunningLeftHash = Animator.StringToHash("is_running_left");
         m_isRunningRightHash = Animator.StringToHash("is_running_right");
         m_isArmedHash = Animator.StringToHash("is_armed");
+        m_isDeadHash = Animator.StringToHash("is_dead");
         m_isArmed = false;
         m_isShooting = false;
         m_weaponInventory = new List<Rifle>();
         m_currentWeaponIndex = -1;
         m_maxWeaponsAllowed = 0;
         m_focusedPickableObject = null;
+        m_player.m_onPlayerDamaged += OnPlayerDamagedCallback;
     }
 
     private void Update()
@@ -318,10 +325,7 @@ public class PlayerController : MonoBehaviour, IShooter
             {
                 Rifle currentWeapon = m_weaponInventory[m_currentWeaponIndex];
 
-                if (!currentWeapon.IsFull())
-                {
-                    currentWeapon.AddAmmo(a.GetAmount());
-                }
+                if (!currentWeapon.IsFull()) currentWeapon.AddAmmo(a.GetAmount());
                 else return;
             }
             else return;
@@ -358,9 +362,50 @@ public class PlayerController : MonoBehaviour, IShooter
     /**
      * Return the maximum of weapons allowed
      */
-    public int GetMaxWeaponsCount()
+    public int GetMaxWeaponsAllowed()
     {
         return m_maxWeaponsAllowed;
+    }
+
+    /**
+     * Called when the player is somehow damaged
+     */
+    private void OnPlayerDamagedCallback(object sender, Player.OnPlayerDamagedArgs args)
+    {
+        if (args.m_playerState == Player.State.Dead)
+        {
+            // Play dead anim
+            m_animator.SetBool(m_isDeadHash, true);
+            gameObject.layer = (int) Mathf.Log(m_deadLayerMask.value, 2);
+            enabled = false;
+            m_player.enabled = false;
+            UIManager.HidePickUpPopup();
+            UIManager.HideReleasePopup();
+        }
+
+        ReleaseBlood(transform.position, args.m_playerState == Player.State.Dead);
+    }
+
+    /**
+     * Release some blood around the given position, more if for death
+     */
+    private void ReleaseBlood(Vector3 position, bool forDeath)
+    {
+        for (int x = 0; x < UnityEngine.Random.Range(1, 4); x++)
+        {
+            Transform blood = Instantiate(
+                AssetManager.Blood(),
+                position + new Vector3(UnityEngine.Random.Range(-0.35f, 0.35f), 0f,
+                UnityEngine.Random.Range(-0.35f, 0.35f)),
+                Quaternion.Euler(90f, UnityEngine.Random.Range(0f, 360f), 0f),
+                AssetManager.BloodVFXContainer());
+
+            float randomScaleFactor = forDeath ? UnityEngine.Random.Range(0.6f, 1f) : UnityEngine.Random.Range(0.1f, 0.6f);
+            blood.localScale = new Vector3(
+                randomScaleFactor,
+                randomScaleFactor,
+                1f);
+        }
     }
 
     /**

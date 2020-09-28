@@ -52,6 +52,7 @@ MonoBehaviour:
   m_bulletSpeed: 45
   m_weaponMaxAmmo: 20
   m_bulletRatio: 1
+  m_damageType: 1
 --- !u!212 &-2836931219188247887
 SpriteRenderer:
   m_ObjectHideFlags: 0

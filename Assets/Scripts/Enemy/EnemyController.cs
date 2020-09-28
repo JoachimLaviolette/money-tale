@@ -343,7 +343,7 @@ public class EnemyController : MonoBehaviour, IShooter
         {
             // Play dead anim
             m_currentState = State.DeadFallBack;
-            StartCoroutine(Animate(State.DeadFallBack));
+            StartCoroutine(Animate(args.m_damageType == DamageType.Hard ? State.DeadFlyBack : State.DeadFallBack ));
             gameObject.layer = (int) Mathf.Log(m_deadLayerMask.value, 2);
             enabled = false;
             m_enemy.enabled = false;

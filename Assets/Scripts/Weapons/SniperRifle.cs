@@ -44,7 +44,7 @@ public class SniperRifle: Rifle
         m_weaponAmmo--;
         Transform bulletFire = Instantiate(AssetManager.BulletFire(), bulletFirePosition, bulletFireRotation);
         Bullet bullet = Instantiate(AssetManager.SniperBullet(), bulletPosition, bulletRotation);
-        bullet.Setup(true, bulletDirection, m_bulletSpeed, m_damages, shooterTransform, damageableLayerMask, false);
+        bullet.Setup(true, bulletDirection, m_bulletSpeed, m_damages, m_damageType, shooterTransform, damageableLayerMask, false);
         yield return new WaitForSeconds(m_fireRate);
         Destroy(bulletFire.gameObject);
         Destroy(bullet.gameObject);
