@@ -312,6 +312,22 @@ public class PlayerController : MonoBehaviour, IShooter
             m_maxWeaponsAllowed++;
             m_onWeaponInventoryChanged?.Invoke(this, new OnWeaponInventoryChangedArgs { m_weaponSlotCount = m_maxWeaponsAllowed, m_weapons = m_weaponInventory });
         }
+        else if (m_focusedPickableObject is Ammo a)
+        {
+            if (m_isArmed && m_currentWeaponIndex != -1)
+            {
+                Rifle currentWeapon = m_weaponInventory[m_currentWeaponIndex];
+
+                if (!currentWeapon.IsFull())
+                {
+                    currentWeapon.AddAmmo(a.GetAmount());
+                }
+                else return;
+            }
+            else return;
+
+            m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
+        }
 
         UIManager.HidePickUpPopup();
         m_focusedPickableObject.PickUp();

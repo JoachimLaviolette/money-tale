@@ -103,6 +103,25 @@ public abstract class Rifle: MonoBehaviour, IPickable, IReleasable
     }
 
     /**
+     * Refill the rifle with the given amount
+     */
+    public void AddAmmo(int amount)
+    {
+        m_weaponAmmo += amount;
+
+        if (m_weaponAmmo > m_weaponMaxAmmo)
+            m_weaponAmmo = m_weaponMaxAmmo;
+    }
+
+    /**
+     * Return if rifle is full
+     */
+    public bool IsFull()
+    {
+        return m_weaponAmmo == m_weaponMaxAmmo;
+    }
+
+    /**
      * Mark the rifle as selected
      */
     public void SetSelected(bool isSelected)
