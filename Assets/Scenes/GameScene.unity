@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 78723088}
   - component: {fileID: 78723087}
   - component: {fileID: 78723086}
+  - component: {fileID: 78723090}
   m_Layer: 0
   m_Name: Out
   m_TagString: Untagged
@@ -267,6 +268,9 @@ MonoBehaviour:
   m_isEnabled: 0
   m_enabledMaterial: {fileID: 2100000, guid: b6c36d4165f980f468ad18cd5a065f7a, type: 2}
   m_disabledMaterial: {fileID: 2100000, guid: 5404fab6545a205428f06de6a5ce4053, type: 2}
+  m_playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!64 &78723087
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -275,10 +279,10 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 78723084}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &78723088
@@ -330,6 +334,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 78723084}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &78723090
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78723084}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &82767531
 GameObject:
   m_ObjectHideFlags: 0
@@ -1439,6 +1459,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: ReleasePopup
       objectReference: {fileID: 0}
+    - target: {fileID: 486973453946039005, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 751863824551108139, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 235
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269790622549574206, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269790622549574206, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269790622549574206, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129459806005228638, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.0000009536743
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129459806005228638, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 235
+      objectReference: {fileID: 0}
+    - target: {fileID: 4114831067257809991, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6990124871676780862, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1485,15 +1537,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6990124871676780862, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 157.5
+      value: 147.5
       objectReference: {fileID: 0}
     - target: {fileID: 6990124871676780862, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 115
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 6990124871676780862, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 255
+      value: 235
       objectReference: {fileID: 0}
     - target: {fileID: 6990124871676780862, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1525,15 +1577,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7385039471210876967, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_Color.r
-      value: 0.7830189
+      value: 0.8867924
       objectReference: {fileID: 0}
     - target: {fileID: 7385039471210876967, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_Color.g
-      value: 0.23268957
+      value: 0.8867924
       objectReference: {fileID: 0}
     - target: {fileID: 7385039471210876967, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_Color.b
-      value: 0.23268957
+      value: 0.8867924
+      objectReference: {fileID: 0}
+    - target: {fileID: 7385039471210876967, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8577317915797571646, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
@@ -1598,13 +1654,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_mouseCursorTexture: {fileID: 2800000, guid: 5730f9cf36a096045922c32f5c6f4533, type: 3}
-  m_pickUpPopup: {fileID: 1591515306}
+  m_actionPopup: {fileID: 1591515306}
   m_releasePopup: {fileID: 451602362}
   m_weaponInventoryContainer: {fileID: 766775085}
   m_weaponSlot: {fileID: 3450981446721471106, guid: 488a85a7881e66e4b979c20420e0311a, type: 3}
   m_selectedWeaponData: {fileID: 510007082}
   m_outZone: {fileID: 78723086}
   m_playerController: {fileID: 1010364766}
+  DEFAULT_ACTION_TEXT_COLOR: {r: 0.69803923, g: 0.69803923, b: 0.69803923, a: 1}
+  DEFAULT_ACTION_BACKGROUND_COLOR: {r: 0, g: 0, b: 0, a: 0.7647059}
+  OUT_ZONE_DISABLED_TEXT_COLOR: {r: 0.8867924, g: 0.32208967, b: 0.32208967, a: 1}
+  OUT_ZONE_DISABLED_BACKGROUND_COLOR: {r: 0.28235295, g: 0.011764707, b: 0.011764707, a: 0.7647059}
+  OUT_ZONE_ENABLED_TEXT_COLOR: {r: 0.4755994, g: 0.8018868, b: 0.47281063, a: 1}
+  OUT_ZONE_ENABLED_BACKGROUND_COLOR: {r: 0.0008681584, g: 0.14150941, b: 0, a: 0.7647059}
 --- !u!1 &471048733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1912,7 +1974,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 75, y: -40}
-  m_SizeDelta: {x: 150, y: 60}
+  m_SizeDelta: {x: 150, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &510007080
 MonoBehaviour:
@@ -1927,7 +1989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4433962, g: 0.102483094, b: 0.102483094, a: 0.33333334}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4318,7 +4380,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 486973453946039005, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_Name
-      value: PickUpPopup
+      value: ActionPopup
+      objectReference: {fileID: 0}
+    - target: {fileID: 486973453946039005, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6990124871676780862, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4403,6 +4469,10 @@ PrefabInstance:
     - target: {fileID: 6990124871676780862, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7385039471210876967, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f7e3419314327642a4fcd45b55b5454, type: 3}

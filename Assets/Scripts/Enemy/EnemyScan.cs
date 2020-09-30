@@ -16,7 +16,7 @@ public class EnemyScan : MonoBehaviour
      */
     private void OnTriggerEnter(Collider collider)
     {
-        if (Mathf.Pow(2, collider.gameObject.layer) == m_playerLayerMask)
+        if (collider.gameObject.layer == Mathf.Log(m_playerLayerMask, 2))
         {
             // Debug.Log("Player in sight!");
             m_onPlayerDetected?.Invoke(this, new OnPlayerDetectedArgs { m_playerTransform = collider.transform });
@@ -28,7 +28,7 @@ public class EnemyScan : MonoBehaviour
      */
     private void OnTriggerExit(Collider collider)
     {
-        if (Mathf.Pow(2, collider.gameObject.layer) == m_playerLayerMask)
+        if (collider.gameObject.layer == Mathf.Log(m_playerLayerMask, 2))
         {
             // Debug.Log("Player out of sight...");
             m_onPlayerDetected?.Invoke(this, new OnPlayerDetectedArgs { m_playerTransform = null });

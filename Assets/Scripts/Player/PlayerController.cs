@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour, IShooter
     public EventHandler<OnPickableDetectedArgs> m_onPickableDetected;
     public EventHandler<OnObjectCarriedArgs> m_onObjectCarried;
     public EventHandler<EventArgs> m_onObjectReleased;
+    public EventHandler<OnOutZoneDetectedArgs> m_onOutZoneDetected;
     public class OnWeaponInventoryChangedArgs : EventArgs
     {
         public int m_weaponSlotCount;
@@ -63,6 +64,11 @@ public class PlayerController : MonoBehaviour, IShooter
     public class OnObjectCarriedArgs : EventArgs
     {
         public string m_objectName;
+    }
+    public class OnOutZoneDetectedArgs : EventArgs
+    {
+        public bool m_isInOutZone;
+        public bool m_isOutZoneEnabled;
     }
 
     private void Start()
@@ -293,6 +299,19 @@ public class PlayerController : MonoBehaviour, IShooter
         {
             m_focusedPickableObject = pickableObject;
             m_onPickableDetected?.Invoke(this, new OnPickableDetectedArgs { m_pickableName = pickableObject.GetName() });
+
+            return;
+        }
+
+        OutZone outZone = collider.GetComponent<OutZone>();
+
+        if (outZone != null)
+        {
+            m_onOutZoneDetected?.Invoke(this, new OnOutZoneDetectedArgs { 
+                m_isInOutZone = true,
+                m_isOutZoneEnabled = outZone.isEnabled() });
+
+            return;
         }
     }
 
@@ -307,6 +326,15 @@ public class PlayerController : MonoBehaviour, IShooter
         {
             m_focusedPickableObject = null;
             m_onPickableDetected?.Invoke(this, new OnPickableDetectedArgs { m_pickableName = null });
+        }
+
+        OutZone outZone = collider.GetComponent<OutZone>();
+
+        if (outZone != null)
+        {
+            m_onOutZoneDetected?.Invoke(this, new OnOutZoneDetectedArgs { m_isInOutZone = false });
+
+            return;
         }
     }
 

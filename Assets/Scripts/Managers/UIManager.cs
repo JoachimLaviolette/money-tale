@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UIManager : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Texture2D m_mouseCursorTexture;
     [SerializeField]
-    private ActionPopup m_pickUpPopup;
+    private ActionPopup m_actionPopup;
     [SerializeField]
     private ActionPopup m_releasePopup;
     [SerializeField]
@@ -21,9 +22,20 @@ public class UIManager : MonoBehaviour
     private OutZone m_outZone;
     [SerializeField]
     private PlayerController m_playerController;
+    [SerializeField]
+    private Color
+        DEFAULT_ACTION_TEXT_COLOR,
+        DEFAULT_ACTION_BACKGROUND_COLOR,
+        OUT_ZONE_DISABLED_TEXT_COLOR,
+        OUT_ZONE_DISABLED_BACKGROUND_COLOR,
+        OUT_ZONE_ENABLED_TEXT_COLOR,
+        OUT_ZONE_ENABLED_BACKGROUND_COLOR;
+
 
     private static string m_pickupSampleText = "Pick up {0} [E]";
     private static string m_releaseSampleText = "Release {0} [R]";
+    private static string m_nextFloorSampleText = "Go to the next floor [A]";
+    private static string m_killAllEnemiesSampleText = "Kill all enemies before";
 
     private void Awake()
     {
@@ -39,6 +51,7 @@ public class UIManager : MonoBehaviour
         m_instance.m_playerController.m_onPickableDetected += OnPickableDetectedCallback;
         m_instance.m_playerController.m_onObjectCarried += DisplayReleasePopup;
         m_instance.m_playerController.m_onObjectReleased += HideReleasePopup;
+        m_instance.m_playerController.m_onOutZoneDetected += OnOutZoneDetectedCallback;
         GameManager.m_onAllEnemiesDead += EnableOutZone;
     }
 
@@ -47,25 +60,43 @@ public class UIManager : MonoBehaviour
      */
     private void OnPickableDetectedCallback(object sender, PlayerController.OnPickableDetectedArgs args)
     {
-        if (args.m_pickableName == null) HidePickUpPopup();
-        else DisplayPickUpPopup(args.m_pickableName);
+        if (args.m_pickableName == null) HideActionPopup();
+        else DisplayActionPopup(m_pickupSampleText, args.m_pickableName);
     }
 
     /**
-     * Display the pick up popup
+     * Trigger the appropriate callback when the out zone is reached
      */
-    private void DisplayPickUpPopup(string objectName)
+    private void OnOutZoneDetectedCallback(object sender, PlayerController.OnOutZoneDetectedArgs args)
     {
-        m_instance.m_pickUpPopup.gameObject.SetActive(true);
-        m_instance.m_pickUpPopup.Setup(m_pickupSampleText, objectName);
+        if (!args.m_isInOutZone) HideActionPopup();
+        else 
+            DisplayActionPopup(
+                args.m_isOutZoneEnabled ? m_nextFloorSampleText : m_killAllEnemiesSampleText, 
+                null,
+                () => m_instance.m_actionPopup.Setup(
+                    args.m_isOutZoneEnabled ? OUT_ZONE_ENABLED_TEXT_COLOR : OUT_ZONE_DISABLED_TEXT_COLOR,
+                    args.m_isOutZoneEnabled ? OUT_ZONE_ENABLED_BACKGROUND_COLOR : OUT_ZONE_DISABLED_BACKGROUND_COLOR));
     }
 
     /**
-     * Hide the pick up popup
+     * Display the action popup
      */
-    private void HidePickUpPopup()
+    private void DisplayActionPopup(string sampleText, string textFormatArgs, UnityAction customSetupActionCallback = null)
     {
-        m_instance.m_pickUpPopup.gameObject.SetActive(false);
+        m_instance.m_actionPopup.gameObject.SetActive(true);
+        m_instance.m_actionPopup.Setup(sampleText, textFormatArgs);
+
+        if (customSetupActionCallback != null) customSetupActionCallback.Invoke();
+        else m_instance.m_actionPopup.Setup(DEFAULT_ACTION_TEXT_COLOR, DEFAULT_ACTION_BACKGROUND_COLOR);
+    }
+
+    /**
+     * Hide the action popup
+     */
+    private void HideActionPopup()
+    {
+        m_instance.m_actionPopup.gameObject.SetActive(false);
     }
 
     /**

@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour
     {
         IDamageable collidedObject = collider.GetComponent<IDamageable>();
 
-        if (Mathf.Pow(2, collider.gameObject.layer) == m_damageableLayerMask.value)
+        if (collider.gameObject.layer == Mathf.Log(m_damageableLayerMask, 2))
         {
             if (collidedObject != null)
             {
@@ -51,7 +51,7 @@ public class Bullet : MonoBehaviour
         else
         {
             foreach (LayerMask layer in m_onDestroyLayerMasks)
-                if (Mathf.Pow(2, collider.gameObject.layer) == layer.value)
+                if (collider.gameObject.layer == Mathf.Log(layer, 2))
                     Destroy(gameObject);    
         }
     }
