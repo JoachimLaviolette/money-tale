@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -17,6 +18,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private WeaponData m_selectedWeaponData;
     [SerializeField]
+    private OutZone m_outZone;
+    [SerializeField]
     private PlayerController m_playerController;
 
     private static string m_pickupSampleText = "Pick up {0} [E]";
@@ -33,12 +36,25 @@ public class UIManager : MonoBehaviour
         SetupWeaponInventory();
         m_instance.m_playerController.m_onWeaponInventoryChanged += UpdateWeaponInventory;
         m_instance.m_playerController.m_onSelectedWeaponDataChanged += UpdateSelectedWeaponData;
+        m_instance.m_playerController.m_onPickableDetected += OnPickableDetectedCallback;
+        m_instance.m_playerController.m_onObjectCarried += DisplayReleasePopup;
+        m_instance.m_playerController.m_onObjectReleased += HideReleasePopup;
+        GameManager.m_onAllEnemiesDead += EnableOutZone;
+    }
+
+    /**
+     * Trigger the appropriate callback when a pickable object is detected
+     */
+    private void OnPickableDetectedCallback(object sender, PlayerController.OnPickableDetectedArgs args)
+    {
+        if (args.m_pickableName == null) HidePickUpPopup();
+        else DisplayPickUpPopup(args.m_pickableName);
     }
 
     /**
      * Display the pick up popup
      */
-    public static void DisplayPickUpPopup(string objectName)
+    private void DisplayPickUpPopup(string objectName)
     {
         m_instance.m_pickUpPopup.gameObject.SetActive(true);
         m_instance.m_pickUpPopup.Setup(m_pickupSampleText, objectName);
@@ -47,7 +63,7 @@ public class UIManager : MonoBehaviour
     /**
      * Hide the pick up popup
      */
-    public static void HidePickUpPopup()
+    private void HidePickUpPopup()
     {
         m_instance.m_pickUpPopup.gameObject.SetActive(false);
     }
@@ -55,16 +71,16 @@ public class UIManager : MonoBehaviour
     /**
      * Display the release popup
      */
-    public static void DisplayReleasePopup(string objectName)
+    private void DisplayReleasePopup(object sender, PlayerController.OnObjectCarriedArgs args)
     {
         m_instance.m_releasePopup.gameObject.SetActive(true);
-        m_instance.m_releasePopup.Setup(m_releaseSampleText, objectName);
+        m_instance.m_releasePopup.Setup(m_releaseSampleText, args.m_objectName);
     }
 
     /**
      * Hide the release popup
      */
-    public static void HideReleasePopup()
+    private void HideReleasePopup(object sender, EventArgs args)
     {
         m_instance.m_releasePopup.gameObject.SetActive(false);
     }
@@ -111,5 +127,13 @@ public class UIManager : MonoBehaviour
     {
         m_instance.m_weaponInventoryContainer.GetComponentsInChildren<WeaponSlot>()[args.m_weaponIndex].SetSelected(args.m_weapon != null);
         m_instance.m_selectedWeaponData.Setup(args.m_weapon);
+    }
+
+    /**
+     * Enable out zone
+     */
+    private void EnableOutZone(object sender, EventArgs args)
+    {
+        m_instance.m_outZone.SetEnabled(true);
     }
 }

@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour, IShooter
     private bool m_lookForNextTarget;
     private bool m_isShooting;
     [SerializeField]
-    private Transform m_waypointsTransform;
+    private Transform m_waypointData;
     private Transform[] m_waypoints;
     private int m_currentWaypointIndex;
     private Transform m_currentTarget;
@@ -86,7 +86,7 @@ public class EnemyController : MonoBehaviour, IShooter
         m_isTurningRight90Hash = Animator.StringToHash("is_turning_right_90");
         m_lookForNextTarget = true;
         m_isShooting = false;
-        m_waypoints = m_waypointsTransform.GetComponentsInChildren<Transform>().Skip(1).ToArray();
+        m_waypoints = m_waypointData.GetComponentsInChildren<Transform>().Skip(1).ToArray();
         m_currentTarget = null;
         m_currentWaypointIndex = 0;
         m_currentState = State.IdleRifle;

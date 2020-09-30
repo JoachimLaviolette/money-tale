@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     public class OnEnemyDamagedArgs : EventArgs
     {
+        public Enemy m_enemy;
         public State m_enemyState;
         public Transform m_damagerTransform;
         public DamageType m_damageType;
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour, IDamageable
         if (m_hp < 0f) m_hp = 0f;
 
         m_onEnemyDamaged?.Invoke(this, new OnEnemyDamagedArgs { 
+            m_enemy = this,
             m_enemyState = m_hp == 0f ? State.Dead : State.Damaged, 
             m_damagerTransform = damagerTransform,
             m_damageType = damageType,

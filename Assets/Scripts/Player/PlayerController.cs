@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviour, IShooter
 
     public EventHandler<OnWeaponInventoryChangedArgs> m_onWeaponInventoryChanged;
     public EventHandler<OnSelectedWeaponDataChangedArgs> m_onSelectedWeaponDataChanged;
+    public EventHandler<OnPickableDetectedArgs> m_onPickableDetected;
+    public EventHandler<OnObjectCarriedArgs> m_onObjectCarried;
+    public EventHandler<EventArgs> m_onObjectReleased;
     public class OnWeaponInventoryChangedArgs : EventArgs
     {
         public int m_weaponSlotCount;
@@ -52,6 +55,14 @@ public class PlayerController : MonoBehaviour, IShooter
     {
         public int m_weaponIndex;
         public Rifle m_weapon;
+    }
+    public class OnPickableDetectedArgs : EventArgs
+    {
+        public string m_pickableName;
+    }
+    public class OnObjectCarriedArgs : EventArgs
+    {
+        public string m_objectName;
     }
 
     private void Start()
@@ -242,7 +253,7 @@ public class PlayerController : MonoBehaviour, IShooter
      */
     public void Equip(int weaponIndex)
     {
-        if (weaponIndex > m_maxWeaponsAllowed - 1 || weaponIndex < 0) 
+        if (weaponIndex > m_maxWeaponsAllowed - 1 || weaponIndex < 0)
             throw new NullReferenceException("Invalid weapon index provided.");
 
         if (m_isArmed && m_currentWeaponIndex != -1)
@@ -253,9 +264,9 @@ public class PlayerController : MonoBehaviour, IShooter
         m_weaponInventory[weaponIndex].SetSelected(true);
         m_animator.SetBool(m_isArmedHash, true);
         m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
-        
+
         if (m_weaponInventory[weaponIndex] is IReleasable && m_weaponInventory[weaponIndex] is IPickable)
-            UIManager.DisplayReleasePopup(((IPickable) m_weaponInventory[weaponIndex]).GetName());
+            m_onObjectCarried?.Invoke(this, new OnObjectCarriedArgs { m_objectName = ((IPickable) m_weaponInventory[weaponIndex]).GetName() });
     }
 
     /**
@@ -267,6 +278,7 @@ public class PlayerController : MonoBehaviour, IShooter
         m_weaponInventory[weaponIndex].SetSelected(false);
         m_animator.SetBool(m_isArmedHash, false);
         m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = null });
+        m_onObjectReleased?.Invoke(this, EventArgs.Empty);
         m_currentWeaponIndex = -1;
     }
 
@@ -280,7 +292,7 @@ public class PlayerController : MonoBehaviour, IShooter
         if (pickableObject != null)
         {
             m_focusedPickableObject = pickableObject;
-            UIManager.DisplayPickUpPopup(pickableObject.GetName());
+            m_onPickableDetected?.Invoke(this, new OnPickableDetectedArgs { m_pickableName = pickableObject.GetName() });
         }
     }
 
@@ -294,7 +306,7 @@ public class PlayerController : MonoBehaviour, IShooter
         if (pickableObject != null)
         {
             m_focusedPickableObject = null;
-            UIManager.HidePickUpPopup();
+            m_onPickableDetected?.Invoke(this, new OnPickableDetectedArgs { m_pickableName = null });
         }
     }
 
@@ -333,7 +345,7 @@ public class PlayerController : MonoBehaviour, IShooter
             m_onSelectedWeaponDataChanged?.Invoke(this, new OnSelectedWeaponDataChangedArgs { m_weaponIndex = m_currentWeaponIndex, m_weapon = m_weaponInventory[m_currentWeaponIndex] });
         }
 
-        UIManager.HidePickUpPopup();
+        m_onPickableDetected?.Invoke(this, new OnPickableDetectedArgs { m_pickableName = null });
         m_focusedPickableObject.PickUp();
         m_focusedPickableObject = null;
     }
@@ -354,8 +366,6 @@ public class PlayerController : MonoBehaviour, IShooter
         UnEquip(currentWeaponIndex);
         m_weaponInventory.Remove(m_weaponInventory[currentWeaponIndex]);
         m_onWeaponInventoryChanged?.Invoke(this, new OnWeaponInventoryChangedArgs { m_weaponSlotCount = m_maxWeaponsAllowed, m_weapons = m_weaponInventory });
-
-        UIManager.HideReleasePopup();
         releasableObject.Release(transform.position);
     }
 
@@ -379,8 +389,8 @@ public class PlayerController : MonoBehaviour, IShooter
             gameObject.layer = (int) Mathf.Log(m_deadLayerMask.value, 2);
             enabled = false;
             m_player.enabled = false;
-            UIManager.HidePickUpPopup();
-            UIManager.HideReleasePopup();
+            m_onPickableDetected?.Invoke(this, new OnPickableDetectedArgs { m_pickableName = null });
+            m_onObjectReleased?.Invoke(this, EventArgs.Empty);
         }
 
         ReleaseBlood(transform.position, args.m_playerState == Player.State.Dead);
