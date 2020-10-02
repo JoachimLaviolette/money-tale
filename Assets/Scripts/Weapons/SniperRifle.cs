@@ -48,6 +48,7 @@ public class SniperRifle: Rifle
         yield return new WaitForSeconds(m_fireRate);
         Destroy(bulletFire.gameObject);
         Destroy(bullet.gameObject);
+        yield return new WaitForSeconds(m_forcedFireRate);
         setShootingDone?.Invoke();
     }
 }

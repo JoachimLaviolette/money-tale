@@ -32,8 +32,7 @@ public class EnemyController : MonoBehaviour, IShooter
     [SerializeField]
     private Transform m_bulletPosition;
     private Enemy m_enemy;
-    [SerializeField]
-    private EnemyScan m_enemyScan;
+    private TargetScanner m_targetScanner;
     [SerializeField]
     private LayerMask m_deadLayerMask;
     [SerializeField]
@@ -74,6 +73,7 @@ public class EnemyController : MonoBehaviour, IShooter
         m_animator = GetComponent<Animator>();
         m_enemy = GetComponent<Enemy>();
         m_agent = GetComponent<NavMeshAgent>();
+        m_targetScanner = GetComponentInChildren<TargetScanner>();
         m_isWalkingForwardHash = Animator.StringToHash("is_walking_forward");
         m_isWalkingBackwardHash = Animator.StringToHash("is_walking_backward");
         m_isDeadFallBackHash = Animator.StringToHash("is_dead_fall_back");
@@ -90,7 +90,7 @@ public class EnemyController : MonoBehaviour, IShooter
         m_currentTarget = null;
         m_currentWaypointIndex = 0;
         m_currentState = State.IdleRifle;
-        m_enemyScan.m_onPlayerDetected += OnPlayerDetectedCallback;
+        m_targetScanner.m_onTargetDetected += OnPlayerDetectedCallback;
         m_enemy.m_onEnemyDamaged += OnEnemyDamagedCallback;
     }
 
@@ -311,9 +311,11 @@ public class EnemyController : MonoBehaviour, IShooter
     /**
      * Called when the player is detected by the enemy scan
      */
-    private void OnPlayerDetectedCallback(object sender, EnemyScan.OnPlayerDetectedArgs args)
+    private void OnPlayerDetectedCallback(object sender, TargetScanner.OnTargetDetectedArgs args)
     {
-        if (args.m_playerTransform != null)
+        if (m_currentTarget == args.m_targetTransform) return;
+
+        if (args.m_targetTransform != null)
         {
             m_currentState = State.Running;
             m_agent.speed = m_runSpeed;
@@ -324,7 +326,7 @@ public class EnemyController : MonoBehaviour, IShooter
             m_agent.speed = 0f;
         }
 
-        m_currentTarget = args.m_playerTransform;
+        m_currentTarget = args.m_targetTransform;
     }
 
     /**
@@ -347,7 +349,7 @@ public class EnemyController : MonoBehaviour, IShooter
             gameObject.layer = (int) Mathf.Log(m_deadLayerMask.value, 2);
             enabled = false;
             m_enemy.enabled = false;
-            m_enemyScan.enabled = false;
+            m_targetScanner.enabled = false;
             m_agent.enabled = false;
         }
 
@@ -386,5 +388,9 @@ public class EnemyController : MonoBehaviour, IShooter
         Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.back) * 0.3f);
         Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.left) * 0.3f);
         Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.right) * 0.3f);
+
+        // Draw gizmo line to show the shooting distance radius
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * m_shootMaxDetectionDistance);
     }
 }

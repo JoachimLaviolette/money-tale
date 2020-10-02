@@ -10,8 +10,11 @@ public abstract class Rifle: MonoBehaviour, IPickable, IReleasable
     [Range(25f, 100f)]
     protected float m_damages = 25f;
     [SerializeField]
+    [Range(0f, 15f)]
+    protected float m_forcedFireRate = 0f; // forced time you must wait before shooting again
+    [SerializeField]
     [Range(0f, 1f)]
-    protected float m_fireRate = 0.25f; // how much time you have to wait before shooting again
+    protected float m_fireRate = 0.25f; // how much time you must wait before shooting again
     [SerializeField]
     [Range(1, 50f)]
     protected float m_bulletSpeed; // how fast are the bullets
