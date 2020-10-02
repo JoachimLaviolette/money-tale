@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour, IShooter
     public EventHandler<OnObjectCarriedArgs> m_onObjectCarried;
     public EventHandler<EventArgs> m_onObjectReleased;
     public EventHandler<OnOutZoneDetectedArgs> m_onOutZoneDetected;
+    public EventHandler<EventArgs> m_onPlayerDead;
     public class OnWeaponInventoryChangedArgs : EventArgs
     {
         public int m_weaponSlotCount;
@@ -419,6 +420,7 @@ public class PlayerController : MonoBehaviour, IShooter
             m_player.enabled = false;
             m_onPickableDetected?.Invoke(this, new OnPickableDetectedArgs { m_pickableName = null });
             m_onObjectReleased?.Invoke(this, EventArgs.Empty);
+            m_onPlayerDead?.Invoke(this, EventArgs.Empty);
         }
 
         ReleaseBlood(transform.position, args.m_playerState == Player.State.Dead);

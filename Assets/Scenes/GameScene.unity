@@ -1653,7 +1653,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b7b40e633548f408872a137566a36c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canvasTransform: {fileID: 1514934063}
   m_mouseCursorTexture: {fileID: 2800000, guid: 5730f9cf36a096045922c32f5c6f4533, type: 3}
+  m_infoMessage: {fileID: 8987897668502688903, guid: d8e5f424d7b71e648b97131c04af55e2, type: 3}
   m_actionPopup: {fileID: 1591515306}
   m_releasePopup: {fileID: 451602362}
   m_weaponInventoryContainer: {fileID: 766775085}
@@ -2938,7 +2940,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6632680291165902606, guid: 37a0f8ef7b8606340b7deffb8f4b54d5, type: 3}
       propertyPath: m_fireRate
-      value: 0.182
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632680291165902606, guid: 37a0f8ef7b8606340b7deffb8f4b54d5, type: 3}
+      propertyPath: m_damages
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37a0f8ef7b8606340b7deffb8f4b54d5, type: 3}
@@ -3240,6 +3246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyData: {fileID: 1147023597}
+  m_playerController: {fileID: 1010364766}
 --- !u!1 &1086002542
 GameObject:
   m_ObjectHideFlags: 0

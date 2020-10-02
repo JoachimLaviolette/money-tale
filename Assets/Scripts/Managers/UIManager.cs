@@ -7,7 +7,11 @@ public class UIManager : MonoBehaviour
 {
     private static UIManager m_instance;
     [SerializeField]
+    private Transform m_canvasTransform;
+    [SerializeField]
     private Texture2D m_mouseCursorTexture;
+    [SerializeField]
+    private InfoMessage m_infoMessage;
     [SerializeField]
     private ActionPopup m_actionPopup;
     [SerializeField]
@@ -31,7 +35,6 @@ public class UIManager : MonoBehaviour
         OUT_ZONE_ENABLED_TEXT_COLOR,
         OUT_ZONE_ENABLED_BACKGROUND_COLOR;
 
-
     private static string m_pickupSampleText = "Pick up {0} [E]";
     private static string m_releaseSampleText = "Release {0} [R]";
     private static string m_nextFloorSampleText = "Go to the next floor [A]";
@@ -52,6 +55,8 @@ public class UIManager : MonoBehaviour
         m_instance.m_playerController.m_onObjectCarried += DisplayReleasePopup;
         m_instance.m_playerController.m_onObjectReleased += HideReleasePopup;
         m_instance.m_playerController.m_onOutZoneDetected += OnOutZoneDetectedCallback;
+        m_instance.m_playerController.m_onOutZoneDetected += OnOutZoneDetectedCallback;
+        GameManager.m_onPlayerDead += OnPlayerDeadCallback;
         GameManager.m_onAllEnemiesDead += EnableOutZone;
     }
 
@@ -77,6 +82,18 @@ public class UIManager : MonoBehaviour
                 () => m_instance.m_actionPopup.Setup(
                     args.m_isOutZoneEnabled ? OUT_ZONE_ENABLED_TEXT_COLOR : OUT_ZONE_DISABLED_TEXT_COLOR,
                     args.m_isOutZoneEnabled ? OUT_ZONE_ENABLED_BACKGROUND_COLOR : OUT_ZONE_DISABLED_BACKGROUND_COLOR));
+    }
+
+    /**
+     * Triggered when the player is dead
+     */
+    private void OnPlayerDeadCallback(object sender, GameManager.OnPlayerDeadArgs args)
+    {
+        InfoMessage infoMessage = Instantiate(m_infoMessage, m_canvasTransform);
+        infoMessage.Setup(
+            args.m_message,
+            args.m_option1, 
+            args.m_option2);
     }
 
     /**
