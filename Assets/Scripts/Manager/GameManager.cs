@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Transform m_enemyData;
     private List<Enemy> m_enemies;
-    [SerializeField]
-    private PlayerController m_playerController;
     private int m_enemyInitialCount;
     private int m_enemyCurrentCount;
     public static EventHandler<EventArgs> m_onAllEnemiesDead;
@@ -36,7 +34,7 @@ public class GameManager : MonoBehaviour
         m_instance.m_enemyInitialCount = m_instance.m_enemies.Count;
         m_instance.m_enemyCurrentCount = m_instance.m_enemyInitialCount;
         ObserveAllEnemies();
-        m_instance.m_playerController.m_onPlayerDead += OnPlayerDeadCallback;
+        AssetManager.PlayerController().m_onPlayerDead += OnPlayerDeadCallback;
     }
 
     /**

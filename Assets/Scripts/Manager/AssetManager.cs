@@ -5,6 +5,8 @@ public class AssetManager : MonoBehaviour
     private static AssetManager m_instance;
 
     [SerializeField]
+    private PlayerController m_playerController;
+    [SerializeField]
     private Transform m_bulletFire;
     [SerializeField]
     private Transform m_sidekickBulletFire;
@@ -22,6 +24,11 @@ public class AssetManager : MonoBehaviour
     private void Awake()
     {
         if (m_instance == null) m_instance = this;
+    }
+
+    public static PlayerController PlayerController()
+    {
+        return m_instance.m_playerController;
     }
 
     public static Transform BulletFire()

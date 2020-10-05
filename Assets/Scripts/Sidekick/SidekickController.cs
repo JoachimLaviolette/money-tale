@@ -2,11 +2,10 @@
 
 public class SidekickController : MonoBehaviour, IShooter
 {
+    private PlayerController m_playerController;
     private Rifle m_weapon;
     private Transform m_currentTarget;
     private bool m_isShooting;
-    [SerializeField]
-    private PlayerController m_playerController;
     private TargetScanner m_targetScanner;
     [SerializeField]
     private Transform m_bulletFirePosition;
@@ -22,7 +21,7 @@ public class SidekickController : MonoBehaviour, IShooter
 
     private void Start()
     {
-        Rotate(m_playerController.transform);
+        m_playerController = AssetManager.PlayerController();
         m_weapon = GetComponentInChildren<Rifle>();
         m_targetScanner = GetComponentInChildren<TargetScanner>();
         m_currentTarget = null;
@@ -32,7 +31,7 @@ public class SidekickController : MonoBehaviour, IShooter
 
     private void Update()
     {
-        Rotate();
+        Rotate(m_currentTarget ?? m_playerController.transform);
         Shoot();
     }
 
