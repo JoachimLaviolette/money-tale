@@ -319,6 +319,8 @@ public class EnemyController : MonoBehaviour, IShooter
         {
             m_currentState = State.Running;
             m_agent.speed = m_runSpeed;
+            StopCoroutine(nameof(Animate));
+            m_lookForNextTarget = true;
         } 
         else
         {
