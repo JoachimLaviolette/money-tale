@@ -7,9 +7,13 @@ public class AssetManager : MonoBehaviour
     [SerializeField]
     private Transform m_bulletFire;
     [SerializeField]
+    private Transform m_sidekickBulletFire;
+    [SerializeField]
     private Bullet m_regularBullet;
     [SerializeField]
     private Bullet m_sniperBullet;
+    [SerializeField]
+    private Bullet m_sidekickBullet;
     [SerializeField]
     private Transform m_bloodVFXContainer;
     [SerializeField]
@@ -25,6 +29,11 @@ public class AssetManager : MonoBehaviour
         return m_instance.m_bulletFire;
     }
 
+    public static Transform SidekickBulletFire()
+    {
+        return m_instance.m_sidekickBulletFire;
+    }
+
     public static Bullet RegularBullet()
     {
         return m_instance.m_regularBullet;
@@ -33,6 +42,11 @@ public class AssetManager : MonoBehaviour
     public static Bullet SniperBullet()
     {
         return m_instance.m_sniperBullet;
+    }
+
+    public static Bullet SidekickBullet()
+    {
+        return m_instance.m_sidekickBullet;
     }
 
     public static Transform BloodVFXContainer()
