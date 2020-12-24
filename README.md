@@ -1,5 +1,11 @@
 # Money Tale
+
+![cover](https://github.com/JoachimLaviolette/money-tale/tree/master/Screenshots/cover.png)
+
 ## Type
+
 2.5D game, made with Unity
+
 ## Plot
-You wake up in a bank safe. Why? Good question. While you try to escape, the bank’s alarm rings off. No choice, you must wipe off the waves of guards to access the next floor. Your goal? Try to reach the rooftop. Perhaps a hang gliding is waiting for you, who knows? Good luck!
+
+You wake up in a bank safe. Why? Good question. While you try to escape, the bank’s alarm rings off. No choice, you must wipe off the waves of guards to access the next floor. Your goal? Try to reach the rooftop. Perhaps a hang gliding is waiting for you, who knows?
