@@ -1,6 +1,6 @@
 # Money Tale
 
-![cover](https://github.com/JoachimLaviolette/money-tale/tree/master/Screenshots/cover.png)
+![cover](https://github.com/JoachimLaviolette/money-tale/tree/master/Screenshots/cover.png?raw=true)
 
 ## Type
 
